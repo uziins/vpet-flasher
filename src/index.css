@@ -1,142 +1,98 @@
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap');
-
 :root {
-  --text: #e2e8f0;
-  --text-h: #f8fafc;
-  --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
-  --glass-bg: rgba(30, 41, 59, 0.4);
-  --glass-border: rgba(255, 255, 255, 0.1);
-  --accent: #8b5cf6;
-  --accent-glow: rgba(139, 92, 246, 0.5);
-  
-  --sans: 'Outfit', system-ui, -apple-system, sans-serif;
+  --bg-color: #4a5568;
+  --container-bg: #f7fafc;
+  --text-main: #1a202c;
+  --text-muted: #4a5568;
+  --border-color: #000000;
+  --accent-color: #ed8936;
+  --accent-hover: #dd6b20;
+  --pixel-font: 'Press Start 2P', monospace;
 }
 
 body {
   margin: 0;
   min-height: 100vh;
-  background: var(--bg-gradient);
-  color: var(--text);
-  font-family: var(--sans);
+  background-color: var(--bg-color);
+  background-image: 
+    linear-gradient(45deg, #2d3748 25%, transparent 25%, transparent 75%, #2d3748 75%, #2d3748), 
+    linear-gradient(45deg, #2d3748 25%, transparent 25%, transparent 75%, #2d3748 75%, #2d3748);
+  background-size: 20px 20px;
+  background-position: 0 0, 10px 10px;
+  color: var(--text-main);
+  font-family: var(--pixel-font);
   display: flex;
   justify-content: center;
   align-items: center;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  padding: 2rem;
+  -webkit-font-smoothing: none;
 }
 
 #root {
   width: 100%;
   max-width: 800px;
-  padding: 2rem;
   box-sizing: border-box;
 }
 
-h1, h2 {
-  color: var(--text-h);
-  margin: 0;
+h1, h2, h3 {
+  color: var(--text-main);
+  text-transform: uppercase;
+  margin-top: 0;
+  line-height: 1.4;
 }
 
 h1 {
-  font-size: 3.5rem;
-  font-weight: 700;
-  letter-spacing: -0.05em;
-  background: linear-gradient(to right, #a78bfa, #f472b6);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  margin-bottom: 1rem;
+  font-size: 2rem;
+  text-shadow: 3px 3px 0px var(--accent-color);
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+h3 {
+  font-size: 1rem;
 }
 
 p {
-  font-size: 1.125rem;
-  line-height: 1.6;
-  color: #94a3b8;
+  font-size: 0.8rem;
+  line-height: 1.8;
+  color: var(--text-muted);
 }
 
-/* Glassmorphism Container */
 .glass-container {
-  background: var(--glass-bg);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid var(--glass-border);
-  border-radius: 24px;
-  padding: 3rem;
-  text-align: center;
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  background: var(--container-bg);
+  border: 4px solid var(--border-color);
+  padding: 2rem;
+  box-shadow: 12px 12px 0px rgba(0, 0, 0, 1);
   position: relative;
-  overflow: hidden;
-}
-
-.glass-container::before {
-  content: '';
-  position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: radial-gradient(circle, rgba(139,92,246,0.1) 0%, transparent 50%);
-  z-index: -1;
-  pointer-events: none;
-}
-
-/* Custom styles for ESP Web Tools Button */
-esp-web-install-button {
-  margin-top: 2rem;
-  display: inline-block;
-}
-
-esp-web-install-button::part(button) {
-  background: linear-gradient(135deg, #8b5cf6, #d946ef);
-  color: white;
-  border: none;
-  padding: 1rem 2.5rem;
-  font-size: 1.25rem;
-  font-family: var(--sans);
-  font-weight: 600;
-  border-radius: 9999px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 15px var(--accent-glow);
-}
-
-esp-web-install-button::part(button):hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px var(--accent-glow);
-}
-
-esp-web-install-button::part(button):active {
-  transform: translateY(1px);
 }
 
 .features {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 1.5rem;
-  margin-top: 3rem;
+  margin-top: 2rem;
   text-align: left;
 }
 
 .feature-card {
-  background: rgba(0, 0, 0, 0.2);
-  border: 1px solid var(--glass-border);
-  border-radius: 16px;
+  background: #fff;
+  border: 4px solid var(--border-color);
   padding: 1.5rem;
-  transition: transform 0.3s ease;
+  box-shadow: 6px 6px 0px rgba(0, 0, 0, 1);
+  transition: transform 0.1s;
 }
 
 .feature-card:hover {
-  transform: translateY(-5px);
-  border-color: rgba(139, 92, 246, 0.3);
+  transform: translate(-2px, -2px);
+  box-shadow: 8px 8px 0px rgba(0, 0, 0, 1);
 }
 
 .feature-card h3 {
-  color: #e2e8f0;
-  font-size: 1.25rem;
-  margin-top: 0;
-  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+  color: #000;
 }
 
 .feature-card p {
-  font-size: 0.95rem;
-  margin: 0;
+  font-size: 0.7rem;
+  color: #333;
 }

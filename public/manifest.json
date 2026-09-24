@@ -1,5 +1,5 @@
 {
-  "name": "Digimon V-Pet ESP32",
+  "name": "Diginode",
   "version": "1.0.0",
   "home_assistant_domain": "esphome",
   "funding_url": "https://github.com/rifauddint/vpet-esp",

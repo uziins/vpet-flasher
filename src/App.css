@@ -1,1 +1,157 @@
-// Cleared
+.install-action {
+  margin: 2rem 0;
+  text-align: center;
+}
+
+.connect-btn, .flash-btn {
+  background-color: var(--accent-color);
+  color: #fff;
+  border: 4px solid var(--border-color);
+  padding: 1rem 1.5rem;
+  font-size: 0.9rem;
+  font-family: var(--pixel-font);
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow: 6px 6px 0px rgba(0, 0, 0, 1);
+  transition: transform 0.1s, box-shadow 0.1s, background-color 0.1s;
+}
+
+.connect-btn:hover:not(:disabled), .flash-btn:hover:not(:disabled) {
+  background-color: var(--accent-hover);
+  transform: translate(2px, 2px);
+  box-shadow: 4px 4px 0px rgba(0, 0, 0, 1);
+}
+
+.connect-btn:active:not(:disabled), .flash-btn:active:not(:disabled) {
+  transform: translate(6px, 6px);
+  box-shadow: 0px 0px 0px rgba(0, 0, 0, 1);
+}
+
+.connect-btn:disabled, .flash-btn:disabled {
+  background-color: #a0aec0;
+  color: #4a5568;
+  cursor: not-allowed;
+  transform: translate(4px, 4px);
+  box-shadow: 2px 2px 0px rgba(0, 0, 0, 1);
+}
+
+.dashboard {
+  width: 100%;
+  animation: none;
+  margin-top: 2rem;
+}
+
+.device-info-card {
+  background: #fff;
+  border: 4px solid var(--border-color);
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+  text-align: left;
+  box-shadow: 6px 6px 0px rgba(0, 0, 0, 1);
+}
+
+.device-info-card h3 {
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  color: #000;
+  font-size: 0.9rem;
+}
+
+.device-info-card p {
+  margin: 0.8rem 0;
+  font-size: 0.75rem;
+  color: #000;
+}
+
+.device-info-card strong {
+  color: var(--accent-color);
+}
+
+.version-selector-container {
+  margin: 2rem 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.version-label {
+  font-size: 0.8rem;
+  color: #000;
+  text-transform: uppercase;
+}
+
+.select-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 400px;
+}
+
+.glass-select {
+  appearance: none;
+  width: 100%;
+  background: #fff;
+  border: 4px solid var(--border-color);
+  color: #000;
+  font-family: var(--pixel-font);
+  font-size: 0.8rem;
+  padding: 1rem 1.5rem;
+  outline: none;
+  cursor: pointer;
+  box-shadow: 6px 6px 0px rgba(0, 0, 0, 1);
+  transition: transform 0.1s, box-shadow 0.1s;
+}
+
+.glass-select:focus, .glass-select:hover {
+  transform: translate(2px, 2px);
+  box-shadow: 4px 4px 0px rgba(0, 0, 0, 1);
+  background: #f7fafc;
+}
+
+.select-wrapper::after {
+  content: "▼";
+  font-size: 0.8rem;
+  color: #000;
+  position: absolute;
+  right: 1.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+.progress-bar-container {
+  width: 100%;
+  height: 24px;
+  background: #fff;
+  border: 4px solid var(--border-color);
+  margin-top: 1.5rem;
+  box-shadow: inset 4px 4px 0px rgba(0, 0, 0, 0.2);
+}
+
+.progress-bar {
+  height: 100%;
+  background-color: #48bb78; /* Pixel green */
+  transition: width 0.3s steps(10);
+  border-right: 4px solid var(--border-color);
+}
+
+.terminal-logs {
+  background: #000;
+  border: 4px solid var(--border-color);
+  padding: 1rem;
+  margin-top: 1.5rem;
+  text-align: left;
+  max-height: 250px;
+  overflow-y: auto;
+  color: #48bb78; /* Terminal green */
+  box-shadow: 6px 6px 0px rgba(0, 0, 0, 1);
+}
+
+.terminal-logs pre {
+  margin: 0;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  font-size: 0.7rem;
+  line-height: 1.5;
+  font-family: var(--pixel-font);
+}
