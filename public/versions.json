@@ -1,10 +1,5 @@
 [
   {
-    "version": "v1.1.0",
-    "name": "Diginode v1.1.0 (Latest)",
-    "manifest": "./manifest.json"
-  },
-  {
     "version": "v1.0.0",
     "name": "Diginode v1.0.0 (Stable)",
     "manifest": "./manifest.json"

@@ -65,34 +65,4 @@ p {
   position: relative;
 }
 
-.features {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 1.5rem;
-  margin-top: 2rem;
-  text-align: left;
-}
 
-.feature-card {
-  background: #fff;
-  border: 4px solid var(--border-color);
-  padding: 1.5rem;
-  box-shadow: 6px 6px 0px rgba(0, 0, 0, 1);
-  transition: transform 0.1s;
-}
-
-.feature-card:hover {
-  transform: translate(-2px, -2px);
-  box-shadow: 8px 8px 0px rgba(0, 0, 0, 1);
-}
-
-.feature-card h3 {
-  font-size: 0.9rem;
-  margin-bottom: 1rem;
-  color: #000;
-}
-
-.feature-card p {
-  font-size: 0.7rem;
-  color: #333;
-}

@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { Transport, ESPLoader } from 'esptool-js';
 import './App.css';
 
+let globalTransport = null;
+
 function App() {
   const [appState, setAppState] = useState("DISCONNECTED"); // DISCONNECTED, CONNECTING, DASHBOARD, FLASHING
   const [deviceInfo, setDeviceInfo] = useState(null);
@@ -30,12 +32,24 @@ function App() {
   }, []);
 
   const handleConnect = async () => {
+    let transport = null;
+    
+    // Bersihkan transport global jika ada (berguna saat hot-reload/strict mode)
+    if (globalTransport) {
+      try {
+        await globalTransport.disconnect();
+      } catch (e) {
+        console.warn("Gagal menutup transport lama:", e);
+      }
+      globalTransport = null;
+    }
+
     try {
       setAppState("CONNECTING");
       
       const port = await navigator.serial.requestPort();
-      const transport = new Transport(port, true);
-      await transport.connect();
+      transport = new Transport(port, true);
+      globalTransport = transport;
       
       const loader = new ESPLoader({
         transport,
@@ -63,8 +77,15 @@ function App() {
       setAppState("DASHBOARD");
     } catch (e) {
       console.error(e);
+      if (transport) {
+        try {
+          await transport.disconnect();
+        } catch (disconnectErr) {
+          console.error("Failed to disconnect after error", disconnectErr);
+        }
+      }
       setAppState("DISCONNECTED");
-      alert("Gagal terhubung: " + e.message);
+      alert("Gagal terhubung: " + e.message + "\n\nJika terus gagal, cabut pasang kabel USB atau refresh halaman ini.");
     }
   };
 
@@ -111,7 +132,7 @@ function App() {
       });
       
       loader.info("Flashing Selesai!");
-      await loader.hardReset();
+      await loader.softReset(false);
       
       setAppState("DASHBOARD");
       alert("Flashing berhasil!");
@@ -120,6 +141,19 @@ function App() {
       alert("Flashing gagal: " + e.message);
       setAppState("DASHBOARD");
     }
+  };
+
+  const handleDisconnect = async () => {
+    if (globalTransport) {
+      try {
+        await globalTransport.disconnect();
+      } catch (e) {
+        console.error("Error disconnecting:", e);
+      }
+      globalTransport = null;
+    }
+    setDeviceInfo(null);
+    setAppState("DISCONNECTED");
   };
 
   const renderDisconnected = () => (
@@ -170,7 +204,15 @@ function App() {
         </div>
       </div>
 
-      <div className="install-action">
+      <div className="install-action" style={{ display: 'flex', gap: '1rem', justifyContent: 'center' }}>
+        <button 
+          className="connect-btn" 
+          onClick={handleDisconnect} 
+          disabled={appState === "FLASHING"}
+          style={{ backgroundColor: '#e53e3e', borderColor: '#742a2a' }}
+        >
+          Putuskan
+        </button>
         <button 
           className="flash-btn" 
           onClick={handleFlash} 
@@ -200,16 +242,6 @@ function App() {
       
       {appState === "DISCONNECTED" || appState === "CONNECTING" ? renderDisconnected() : renderDashboard()}
       
-      <div className="features">
-        <div className="feature-card">
-          <h3>⚡ Instan</h3>
-          <p>Tidak perlu install driver, software, atau tools tambahan. Cukup pakai browser Chrome/Edge.</p>
-        </div>
-        <div className="feature-card">
-          <h3>🎮 Plug & Play</h3>
-          <p>Setelah flashing selesai, Diginode Anda siap dimainkan seketika.</p>
-        </div>
-      </div>
     </div>
   )
 }
