@@ -9,8 +9,20 @@
       "chipFamily": "ESP32",
       "parts": [
         {
-          "path": "./public/diginode-v1.0.0.bin",
-          "offset": 0
+          "path": "./bootloader.bin",
+          "offset": 4096
+        },
+        {
+          "path": "./partitions.bin",
+          "offset": 32768
+        },
+        {
+          "path": "./boot_app0.bin",
+          "offset": 57344
+        },
+        {
+          "path": "./diginode-v1.0.0.bin",
+          "offset": 65536
         }
       ]
     }

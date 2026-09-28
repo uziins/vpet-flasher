@@ -14,6 +14,7 @@ function App() {
   
   const [logs, setLogs] = useState([]);
   const [progress, setProgress] = useState(0);
+  const [showConfirm, setShowConfirm] = useState(false);
 
   useEffect(() => {
     fetch('./versions.json')
@@ -39,7 +40,7 @@ function App() {
       try {
         await globalTransport.disconnect();
       } catch (e) {
-        console.warn("Gagal menutup transport lama:", e);
+        console.warn("Failed to close old transport:", e);
       }
       globalTransport = null;
     }
@@ -85,11 +86,12 @@ function App() {
         }
       }
       setAppState("DISCONNECTED");
-      alert("Gagal terhubung: " + e.message + "\n\nJika terus gagal, cabut pasang kabel USB atau refresh halaman ini.");
+      alert("Failed to connect: " + e.message + "\n\nIf it keeps failing, unplug and replug the USB cable or refresh this page.");
     }
   };
 
-  const handleFlash = async () => {
+  const executeFlash = async () => {
+    setShowConfirm(false);
     if (!deviceInfo || !deviceInfo.loader) return;
     
     try {
@@ -98,7 +100,7 @@ function App() {
       setLogs([]);
       
       const loader = deviceInfo.loader;
-      loader.info("Memuat manifest...");
+      loader.info("Loading manifest...");
       
       const manifestRes = await fetch(selectedManifest);
       const manifest = await manifestRes.json();
@@ -107,7 +109,7 @@ function App() {
       const fileArray = [];
       
       for (let part of parts) {
-        loader.info(`Mengunduh part: ${part.path}`);
+        loader.info(`Downloading part: ${part.path}`);
         const partUrl = new URL(part.path, new URL(selectedManifest, window.location.href)).href;
         const partRes = await fetch(partUrl);
         const buffer = await partRes.arrayBuffer();
@@ -117,7 +119,7 @@ function App() {
         });
       }
       
-      loader.info("Memulai proses flashing...");
+      loader.info("Starting flashing process...");
       
       await loader.writeFlash({
         fileArray,
@@ -131,14 +133,28 @@ function App() {
         }
       });
       
-      loader.info("Flashing Selesai!");
-      await loader.softReset(false);
+      loader.info("Flashing Completed!");
+      loader.info("Restarting device...");
       
-      setAppState("DASHBOARD");
-      alert("Flashing berhasil!");
+      // Manual hard reset sequence via DTR/RTS
+      if (globalTransport) {
+        try {
+          await globalTransport.setSignals(false, true); // EN=Low, Reset
+          await new Promise(r => setTimeout(r, 100));
+          await globalTransport.setSignals(false, false); // EN=High, Boot
+          await new Promise(r => setTimeout(r, 200));
+          await globalTransport.disconnect();
+        } catch (resetErr) {
+          console.warn("Failed to reset device via DTR/RTS:", resetErr);
+        }
+        globalTransport = null;
+      }
+      setDeviceInfo(null);
+      setAppState("DISCONNECTED");
+      alert("Flashing successful! The device has been disconnected and will now restart.");
     } catch (e) {
       console.error(e);
-      alert("Flashing gagal: " + e.message);
+      alert("Flashing failed: " + e.message);
       setAppState("DASHBOARD");
     }
   };
@@ -159,12 +175,12 @@ function App() {
   const renderDisconnected = () => (
     <>
       <p>
-        Flash firmware terbaru langsung ke device Diginode Anda melalui browser. 
-        Sambungkan device menggunakan kabel USB dan klik tombol di bawah untuk memulai.
+        Flash the latest firmware directly to your Diginode device via browser. 
+        Connect your device using a USB cable and click the button below to start.
       </p>
       <div className="install-action">
         <button className="connect-btn" onClick={handleConnect} disabled={appState === "CONNECTING"}>
-          {appState === "CONNECTING" ? "Menghubungkan..." : "Hubungkan Perangkat"}
+          {appState === "CONNECTING" ? "Connecting..." : "Connect Device"}
         </button>
       </div>
     </>
@@ -173,18 +189,18 @@ function App() {
   const renderDashboard = () => (
     <div className="dashboard">
       <div className="device-info-card">
-        <h3>ℹ️ Informasi Perangkat</h3>
+        <h3>ℹ️ Device Information</h3>
         <p><strong>Chip:</strong> {deviceInfo.chip}</p>
         <p><strong>MAC Address:</strong> {deviceInfo.mac}</p>
         <p><strong>Flash Size:</strong> {deviceInfo.flashSize}</p>
       </div>
 
       <div className="version-selector-container">
-        <label htmlFor="version-select" className="version-label">Pilih Versi Firmware:</label>
+        <label htmlFor="version-select" className="version-label">Select Firmware Version:</label>
         <div className="select-wrapper">
           {isLoadingVersions ? (
             <select id="version-select" className="glass-select" disabled>
-              <option>Memuat...</option>
+              <option>Loading...</option>
             </select>
           ) : (
             <select 
@@ -211,14 +227,14 @@ function App() {
           disabled={appState === "FLASHING"}
           style={{ backgroundColor: '#e53e3e', borderColor: '#742a2a' }}
         >
-          Putuskan
+          Disconnect
         </button>
         <button 
           className="flash-btn" 
-          onClick={handleFlash} 
+          onClick={() => setShowConfirm(true)} 
           disabled={appState === "FLASHING"}
         >
-          {appState === "FLASHING" ? `Flashing... ${progress}%` : "Mulai Flashing"}
+          {appState === "FLASHING" ? `Flashing... ${progress}%` : "Start Flashing"}
         </button>
       </div>
 
@@ -241,6 +257,35 @@ function App() {
       <img src="/src/assets/logo.png" alt="Diginode" className="main-logo" style={{ maxWidth: '100%', height: 'auto', maxHeight: '100px', display: 'block', margin: '0 auto 2rem auto', filter: 'drop-shadow(0 4px 6px rgba(0,0,0,0.5))' }} />
       
       {appState === "DISCONNECTED" || appState === "CONNECTING" ? renderDisconnected() : renderDashboard()}
+      
+      {showConfirm && (
+        <div className="modal-overlay">
+          <div className="modal-content retro-modal">
+            <h3 style={{ color: '#e53e3e', marginBottom: '1rem', fontSize: '1.2rem' }}>⚠️ Warning</h3>
+            <p style={{ marginBottom: '0.8rem', lineHeight: '1.5', fontSize: '0.8rem', color: '#333' }}>
+              This will erase the current firmware on your device and replace it with the selected version.
+            </p>
+            <p style={{ marginBottom: '1.5rem', fontWeight: 'bold', fontSize: '0.8rem', color: '#000' }}>
+              Are you sure you want to proceed?
+            </p>
+            <div className="modal-actions" style={{ display: 'flex', gap: '1rem', justifyContent: 'center' }}>
+              <button 
+                className="connect-btn" 
+                onClick={() => setShowConfirm(false)}
+                style={{ backgroundColor: '#a0aec0', borderColor: '#4a5568', color: '#000' }}
+              >
+                Cancel
+              </button>
+              <button 
+                className="flash-btn" 
+                onClick={executeFlash}
+              >
+                Proceed
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
       
     </div>
   )
