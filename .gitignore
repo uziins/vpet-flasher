@@ -23,5 +23,11 @@ dist-ssr
 *.sln
 *.sw?
 
-# Firmware files
-*.bin
+# Environment Variables
+.env
+.env.*
+!.env.example
+
+# Firmware files are explicitly ALLOWED to be tracked by Git
+# so they can be pushed to Vercel or other git-based hosting.
+# Do NOT put *.bin here unless you intend to exclude firmware!
