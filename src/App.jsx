@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Transport, ESPLoader } from 'esptool-js';
 import './App.css';
+import logoImage from './assets/logo.png';
 
 let globalTransport = null;
 
@@ -254,8 +255,8 @@ function App() {
 
   return (
     <div className="glass-container">
-      <img src="diginode-logo.png" alt="Diginode" className="main-logo" style={{ maxWidth: '100%', height: 'auto', maxHeight: '100px', display: 'block', margin: '0 auto 2rem auto', filter: 'drop-shadow(0 4px 6px rgba(0,0,0,0.5))' }} />
-      
+      <img src={logoImage} alt="Diginode" className="main-logo" style={{ maxWidth: '100%', height: 'auto', maxHeight: '100px', display: 'block', margin: '0 auto 2rem auto', filter: 'drop-shadow(0 4px 6px rgba(0,0,0,0.5))' }} />
+
       {appState === "DISCONNECTED" || appState === "CONNECTING" ? renderDisconnected() : renderDashboard()}
       
       {showConfirm && (
