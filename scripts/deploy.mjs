@@ -48,6 +48,8 @@ async function run() {
     const newVersion = await rl.question('Masukkan versi baru (contoh: 1.1.0): ');
     let label = await rl.question('Masukkan label rilis (tekan enter untuk "Latest"): ');
     if (!label) label = "Latest";
+    const changelogInput = await rl.question('Masukkan catatan rilis (opsional, gunakan koma untuk multi-baris): ');
+    const changelog = changelogInput ? changelogInput.split(',').map(s => s.trim()).filter(s => s) : [];
     
     const versionName = `Diginode v${newVersion} (${label})`;
     let binPath = await rl.question('Masukkan path absolut/relatif ke firmware.bin: ');
@@ -97,7 +99,8 @@ async function run() {
     versions.unshift({
       version: `v${newVersion}`,
       name: versionName,
-      manifest: `./firmware/v${newVersion}/manifest.json`
+      manifest: `./firmware/v${newVersion}/manifest.json`,
+      changelog: changelog
     });
     
     await fs.writeFile(versionsPath, JSON.stringify(versions, null, 2));
