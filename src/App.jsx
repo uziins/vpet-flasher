@@ -254,7 +254,7 @@ function App() {
 
   return (
     <div className="glass-container">
-      <img src="/src/assets/logo.png" alt="Diginode" className="main-logo" style={{ maxWidth: '100%', height: 'auto', maxHeight: '100px', display: 'block', margin: '0 auto 2rem auto', filter: 'drop-shadow(0 4px 6px rgba(0,0,0,0.5))' }} />
+      <img src="diginode-logo.png" alt="Diginode" className="main-logo" style={{ maxWidth: '100%', height: 'auto', maxHeight: '100px', display: 'block', margin: '0 auto 2rem auto', filter: 'drop-shadow(0 4px 6px rgba(0,0,0,0.5))' }} />
       
       {appState === "DISCONNECTED" || appState === "CONNECTING" ? renderDisconnected() : renderDashboard()}
       
