@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Transport, ESPLoader } from 'esptool-js';
 import './App.css';
+import logoImage from './assets/logo.png';
 
 let globalTransport = null;
 
@@ -16,10 +17,14 @@ function App() {
   const [progress, setProgress] = useState(0);
   const [showConfirm, setShowConfirm] = useState(false);
 
+  const [eraseData, setEraseData] = useState(false);
+
   useEffect(() => {
-    fetch('./versions.json')
+    const versionsUrl = new URL('../versions.json', window.location.href);
+    fetch(versionsUrl)
       .then(res => res.json())
       .then(data => {
+        data = data.map(v => ({ ...v, manifest: new URL(v.manifest, versionsUrl).href }));
         setVersions(data);
         if (data.length > 0) {
           setSelectedManifest(data[0].manifest);
@@ -31,6 +36,8 @@ function App() {
         setIsLoadingVersions(false);
       });
   }, []);
+
+  const currentVersionData = versions.find(v => v.manifest === selectedManifest);
 
   const handleConnect = async () => {
     let transport = null;
@@ -126,7 +133,7 @@ function App() {
         flashSize: "keep",
         flashMode: "keep",
         flashFreq: "keep",
-        eraseAll: false,
+        eraseAll: eraseData,
         compress: true,
         reportProgress: (fileIndex, written, total) => {
           setProgress(Math.round((written / total) * 100));
@@ -159,6 +166,89 @@ function App() {
     }
   };
 
+
+
+  const handleBackupSave = async () => {
+    if (!deviceInfo || !deviceInfo.loader) return;
+    try {
+      setAppState("FLASHING");
+      setProgress(0);
+      setLogs(["Starting Backup of Save Data (LittleFS Partition)...", "Please do not disconnect your device!"]);
+      
+      const loader = deviceInfo.loader;
+      // Address: 0xE10000, Size: 0x1E0000 (1966080 bytes)
+      const data = await loader.readFlash(0xE10000, 0x1E0000, (packet, current, total) => {
+        setProgress(Math.round((current / total) * 100));
+      });
+      
+      const blob = new Blob([data], { type: "application/octet-stream" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `diginode_save_${new Date().toISOString().split('T')[0]}.bin`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      
+      setLogs(prev => [...prev, "\nBackup downloaded successfully!"]);
+      setTimeout(() => setAppState("DASHBOARD"), 2000);
+    } catch (e) {
+      console.error(e);
+      alert("Backup failed: " + e.message);
+      setAppState("DASHBOARD");
+    }
+  };
+
+  const handleRestoreSave = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    
+    if (file.size !== 1966080) {
+      alert("Invalid backup file! The file size must be exactly 1.96 MB.");
+      e.target.value = null;
+      return;
+    }
+    
+    if (!deviceInfo || !deviceInfo.loader) return;
+    
+    try {
+      setAppState("FLASHING");
+      setProgress(0);
+      setLogs(["Starting Restore of Save Data...", "Please do not disconnect your device!"]);
+      
+      const loader = deviceInfo.loader;
+      const buffer = await file.arrayBuffer();
+      
+      const fileArray = [{
+        data: new Uint8Array(buffer),
+        address: 0xE10000
+      }];
+      
+      await loader.writeFlash({
+        fileArray,
+        flashSize: "keep",
+        flashMode: "keep",
+        flashFreq: "keep",
+        eraseAll: false,
+        compress: true,
+        reportProgress: (fileIndex, written, total) => {
+          setProgress(Math.round((written / total) * 100));
+        }
+      });
+      
+      setLogs(prev => [...prev, "\nRestore Completed Successfully!"]);
+      alert("Save Data Restored! Please reset your device manually.");
+      setAppState("DASHBOARD");
+    } catch (err) {
+      console.error(err);
+      alert("Restore failed: " + err.message);
+      setAppState("DASHBOARD");
+    }
+    
+    e.target.value = null;
+  };
+
   const handleDisconnect = async () => {
     if (globalTransport) {
       try {
@@ -171,6 +261,8 @@ function App() {
     setDeviceInfo(null);
     setAppState("DISCONNECTED");
   };
+
+
 
   const renderDisconnected = () => (
     <>
@@ -193,6 +285,38 @@ function App() {
         <p><strong>Chip:</strong> {deviceInfo.chip}</p>
         <p><strong>MAC Address:</strong> {deviceInfo.mac}</p>
         <p><strong>Flash Size:</strong> {deviceInfo.flashSize}</p>
+      </div>
+
+      <div className="device-info-card" style={{ marginBottom: '1.5rem', background: 'rgba(255, 255, 255, 0.1)' }}>
+        <h3 style={{ marginBottom: '0.8rem' }}>💾 Save Data Manager</h3>
+        <p style={{ fontSize: '0.85rem', marginBottom: '1rem', color: '#555' }}>Backup your Digimon progression to your PC, or restore a previous backup.</p>
+        <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'center' }}>
+          <button 
+            className="connect-btn" 
+            onClick={handleBackupSave} 
+            disabled={appState === "FLASHING"}
+            style={{ padding: '0.6rem 1rem', fontSize: '0.8rem', backgroundColor: '#3182ce', borderColor: '#2b6cb0' }}
+          >
+            ⬇️ Backup Save
+          </button>
+          
+          <label 
+            className="connect-btn" 
+            style={{ 
+              padding: '0.6rem 1rem', fontSize: '0.8rem', backgroundColor: '#38a169', borderColor: '#2f855a', 
+              cursor: appState === "FLASHING" ? 'not-allowed' : 'pointer', opacity: appState === "FLASHING" ? 0.6 : 1 
+            }}
+          >
+            ⬆️ Restore Save
+            <input 
+              type="file" 
+              accept=".bin" 
+              onChange={handleRestoreSave} 
+              disabled={appState === "FLASHING"} 
+              style={{ display: 'none' }} 
+            />
+          </label>
+        </div>
       </div>
 
       <div className="version-selector-container">
@@ -218,17 +342,40 @@ function App() {
             </select>
           )}
         </div>
+        <div style={{ marginTop: '1rem', textAlign: 'center' }}>
+          <label style={{ cursor: 'pointer', fontSize: '0.9rem', color: '#555', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>
+            <input 
+              type="checkbox" 
+              checked={eraseData} 
+              onChange={(e) => setEraseData(e.target.checked)} 
+              disabled={appState === "FLASHING"}
+            />
+            Clean Install (Erase all data and settings)
+          </label>
+        </div>
       </div>
+
+      {currentVersionData?.changelog?.length > 0 && (
+        <div className="changelog-container" style={{ margin: '1rem 0', textAlign: 'left', background: 'rgba(255,255,255,0.5)', padding: '1rem', borderRadius: '4px', border: '2px solid var(--border-color)' }}>
+          <h4 style={{ margin: '0 0 0.5rem 0', color: '#000' }}>Release Notes:</h4>
+          <ul style={{ margin: 0, paddingLeft: '1.5rem', fontSize: '0.85rem', color: '#333' }}>
+            {currentVersionData.changelog.map((note, idx) => (
+              <li key={idx} style={{ marginBottom: '0.25rem' }}>{note}</li>
+            ))}
+          </ul>
+        </div>
+      )}
 
       <div className="install-action" style={{ display: 'flex', gap: '1rem', justifyContent: 'center' }}>
         <button 
           className="connect-btn" 
           onClick={handleDisconnect} 
           disabled={appState === "FLASHING"}
-          style={{ backgroundColor: '#e53e3e', borderColor: '#742a2a' }}
+          style={{ backgroundColor: '#a0aec0', borderColor: '#4a5568', color: '#000' }}
         >
           Disconnect
         </button>
+
         <button 
           className="flash-btn" 
           onClick={() => setShowConfirm(true)} 
@@ -254,8 +401,9 @@ function App() {
 
   return (
     <div className="glass-container">
-      <img src="diginode-logo.png" alt="Diginode" className="main-logo" style={{ maxWidth: '100%', height: 'auto', maxHeight: '100px', display: 'block', margin: '0 auto 2rem auto', filter: 'drop-shadow(0 4px 6px rgba(0,0,0,0.5))' }} />
-      
+      <a href="../" style={{ display: 'block', marginBottom: '1rem', fontSize: '0.7rem', color: 'inherit' }}>&larr; Panduan</a>
+      <img src={logoImage} alt="Diginode" className="main-logo" style={{ maxWidth: '100%', height: 'auto', maxHeight: '100px', display: 'block', margin: '0 auto 2rem auto', filter: 'drop-shadow(0 4px 6px rgba(0,0,0,0.5))' }} />
+
       {appState === "DISCONNECTED" || appState === "CONNECTING" ? renderDisconnected() : renderDashboard()}
       
       {showConfirm && (
@@ -263,7 +411,9 @@ function App() {
           <div className="modal-content retro-modal">
             <h3 style={{ color: '#e53e3e', marginBottom: '1rem', fontSize: '1.2rem' }}>⚠️ Warning</h3>
             <p style={{ marginBottom: '0.8rem', lineHeight: '1.5', fontSize: '0.8rem', color: '#333' }}>
-              This will erase the current firmware on your device and replace it with the selected version.
+              {eraseData 
+                ? "⚠️ You selected Clean Install! This will ERASE all your V-Pet save data permanently and flash the new firmware." 
+                : "This will replace the current firmware on your device with the selected version. Your save data will be kept."}
             </p>
             <p style={{ marginBottom: '1.5rem', fontWeight: 'bold', fontSize: '0.8rem', color: '#000' }}>
               Are you sure you want to proceed?

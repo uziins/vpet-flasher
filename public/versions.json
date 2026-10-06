@@ -1,7 +1,7 @@
 [
   {
     "version": "v1.0.0",
-    "name": "Diginode v1.0.0 (Stable)",
-    "manifest": "./manifest.json"
+    "name": "Diginode v1.0.0",
+    "manifest": "./firmware/v1.0.0/manifest.json"
   }
 ]

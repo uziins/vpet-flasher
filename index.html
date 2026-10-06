@@ -1,18 +1,1293 @@
 <!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/png" href="/favicon.png" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Diginode Web Flasher</title>
+<html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Panduan Diginode</title>
+<link rel="icon" type="image/png" href="/favicon.png">
+<style>html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap">
+<style>
+  :root{
+    --bg:#f3efe2;
+    --surface:#ffffff;
+    --surface-2:#ebe4ce;
+    --surface-3:#e1d8bd;
+    --border:#d6cca9;
+    --text:#1d2420;
+    --text-dim:#5c6b5c;
+    --accent:#1c7a4a;
+    --accent-contrast:#ffffff;
+    --accent-soft:#dcefdf;
+    --warn:#95530a;
+    --warn-soft:#faead0;
+    --danger:#ad2b22;
+    --danger-soft:#f9e1dc;
+    --shadow:rgba(30,30,20,0.10);
+    --lcd-bg:#07140d;
+    --lcd-fg:#49f58a;
+    --lcd-dim:#1f5c3c;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#0b130f;
+      --surface:#121c17;
+      --surface-2:#17241d;
+      --surface-3:#1e2e24;
+      --border:#25362b;
+      --text:#e8f3ec;
+      --text-dim:#92ab9c;
+      --accent:#3fe087;
+      --accent-contrast:#052013;
+      --accent-soft:#143524;
+      --warn:#ffba52;
+      --warn-soft:#30250f;
+      --danger:#ff7568;
+      --danger-soft:#331512;
+      --shadow:rgba(0,0,0,0.45);
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#0b130f;
+    --surface:#121c17;
+    --surface-2:#17241d;
+    --surface-3:#1e2e24;
+    --border:#25362b;
+    --text:#e8f3ec;
+    --text-dim:#92ab9c;
+    --accent:#3fe087;
+    --accent-contrast:#052013;
+    --accent-soft:#143524;
+    --warn:#ffba52;
+    --warn-soft:#30250f;
+    --danger:#ff7568;
+    --danger-soft:#331512;
+    --shadow:rgba(0,0,0,0.45);
+    color-scheme: dark;
+  }
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  *{box-sizing:border-box;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Inter',system-ui,-apple-system,sans-serif;
+    padding-inline:16px;
+    line-height:1.5;
+  }
+  .wrap{max-width:860px;margin:0 auto;padding-block:20px 56px;}
 
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
-</html>
+  .mono{font-family:'JetBrains Mono',ui-monospace,monospace;}
+
+  /* ---------- Header ---------- */
+  header.top{
+    display:flex;align-items:center;gap:14px;flex-wrap:wrap;
+    padding-bottom:18px;margin-bottom:18px;border-bottom:1px solid var(--border);
+  }
+  header.top .logo-img{height:46px;width:auto;flex:none;image-rendering:pixelated;}
+  header.top .titles{flex:1;min-width:160px;}
+  header.top .kicker{font-family:'JetBrains Mono',monospace;font-size:.72rem;letter-spacing:.07em;text-transform:uppercase;color:var(--accent);margin:0;font-weight:700;}
+  header.top p{margin:2px 0 0;color:var(--text-dim);font-size:.88rem;}
+  .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;}
+
+  .flasher-link{
+    font-family:'JetBrains Mono',monospace;font-size:.76rem;font-weight:700;text-decoration:none;
+    padding:8px 14px;border-radius:999px;background:var(--accent);color:var(--accent-contrast);
+    border:1px solid var(--accent);
+  }
+  .flasher-link:hover{filter:brightness(1.08);}
+
+  /* ---------- Tabs ---------- */
+  nav.tabs{
+    display:flex;flex-wrap:wrap;gap:8px;margin-bottom:22px;
+  }
+  nav.tabs button{
+    display:flex;align-items:center;gap:7px;
+    font-family:'JetBrains Mono',monospace;font-size:.76rem;font-weight:600;letter-spacing:.01em;
+    padding:8px 12px;border-radius:999px;border:1px solid var(--border);
+    background:var(--surface);color:var(--text-dim);cursor:pointer;
+    transition:background .15s,color .15s,border-color .15s;
+  }
+  nav.tabs button svg{width:14px;height:14px;flex:none;}
+  nav.tabs button:hover{border-color:var(--accent);color:var(--text);}
+  nav.tabs button[aria-selected="true"]{
+    background:var(--accent);color:var(--accent-contrast);border-color:var(--accent);
+  }
+
+  /* ---------- Panels ---------- */
+  section.panel{display:flex;flex-direction:column;gap:22px;}
+  section.panel[hidden]{display:none;}
+
+  h2.sect-title{
+    font-family:'JetBrains Mono',monospace;font-size:1.05rem;margin:0 0 4px;
+    display:flex;align-items:center;gap:8px;
+  }
+  h2.sect-title svg{width:18px;height:18px;color:var(--accent);flex:none;}
+  .lede{color:var(--text-dim);font-size:.93rem;margin:0;max-width:65ch;}
+
+  .card{
+    background:var(--surface);border:1px solid var(--border);border-radius:14px;
+    padding:16px 18px;box-shadow:0 1px 2px var(--shadow);
+  }
+  .card h3{margin:0 0 8px;font-size:.98rem;font-family:'JetBrains Mono',monospace;}
+  .card h3 .tag{
+    font-family:'Inter',sans-serif;font-weight:600;font-size:.68rem;letter-spacing:.04em;
+    text-transform:uppercase;color:var(--accent);background:var(--accent-soft);
+    padding:2px 7px;border-radius:5px;margin-left:8px;vertical-align:middle;
+  }
+  .card p{margin:0 0 8px;font-size:.89rem;}
+  .card p:last-child{margin-bottom:0;}
+  .card ul, .card ol{margin:6px 0 8px;padding-left:1.3em;font-size:.89rem;}
+  .card ul:last-child, .card ol:last-child{margin-bottom:0;}
+  .card li{margin-bottom:4px;}
+
+  .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  @media (max-width:560px){.grid-2{grid-template-columns:1fr;}}
+
+  /* ---------- Button key chips ---------- */
+  .key{
+    display:inline-flex;align-items:center;justify-content:center;
+    font-family:'JetBrains Mono',monospace;font-weight:700;font-size:.74rem;
+    min-width:1.6em;padding:2px 7px;border-radius:6px;
+    background:var(--surface-3);border:1px solid var(--border);
+    box-shadow:0 1px 0 var(--border);color:var(--text);
+    white-space:nowrap;
+  }
+  .key.hold{background:var(--warn-soft);border-color:var(--warn);color:var(--warn);}
+  .key.a{background:var(--accent-soft);border-color:var(--accent);color:var(--accent);}
+
+  /* ---------- Callouts ---------- */
+  .callout{
+    border-radius:12px;padding:12px 14px;font-size:.87rem;
+    border:1px solid var(--border);display:flex;gap:10px;align-items:flex-start;
+  }
+  .callout svg{width:16px;height:16px;flex:none;margin-top:2px;}
+  .callout.tip{background:var(--accent-soft);border-color:var(--accent);}
+  .callout.tip svg{color:var(--accent);}
+  .callout.warn{background:var(--warn-soft);border-color:var(--warn);}
+  .callout.warn svg{color:var(--warn);}
+  .callout.danger{background:var(--danger-soft);border-color:var(--danger);}
+  .callout.danger svg{color:var(--danger);}
+  .callout b{display:block;font-family:'JetBrains Mono',monospace;font-size:.72rem;letter-spacing:.03em;text-transform:uppercase;margin-bottom:2px;}
+
+  /* ---------- Tables ---------- */
+  .table-wrap{overflow-x:auto;border:1px solid var(--border);border-radius:12px;}
+  table{width:100%;border-collapse:collapse;font-size:.85rem;min-width:420px;}
+  th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--border);vertical-align:top;}
+  thead th{background:var(--surface-2);font-family:'JetBrains Mono',monospace;font-size:.72rem;text-transform:uppercase;letter-spacing:.03em;color:var(--text-dim);}
+  tbody tr:last-child td{border-bottom:none;}
+  tbody tr:hover{background:var(--surface-2);}
+  td.mono-cell{font-family:'JetBrains Mono',monospace;font-weight:600;white-space:nowrap;}
+
+  /* ---------- fake LCD screen mock ---------- */
+  .lcd{
+    background:var(--lcd-bg);border-radius:10px;padding:14px 16px;
+    font-family:'JetBrains Mono',monospace;color:var(--lcd-fg);font-size:.78rem;line-height:1.55;
+    box-shadow:inset 0 0 0 1px rgba(255,255,255,.04), inset 0 0 18px rgba(0,0,0,.5);
+    position:relative;overflow:hidden;
+  }
+  .lcd::before{
+    content:"";position:absolute;inset:0;pointer-events:none;
+    background:repeating-linear-gradient(to bottom, rgba(255,255,255,.025) 0px, rgba(255,255,255,.025) 1px, transparent 1px, transparent 3px);
+  }
+  .lcd .dim{color:var(--lcd-dim);}
+  .lcd .row{display:flex;justify-content:space-between;gap:10px;}
+
+  /* ---------- device hero mock ---------- */
+  .device-mock{
+    display:flex;gap:18px;align-items:center;flex-wrap:wrap;
+    background:linear-gradient(165deg,var(--surface-2),var(--surface));
+    border:1px solid var(--border);border-radius:16px;padding:18px;
+  }
+  .device-shell{
+    width:214px;flex:none;background:var(--surface-3);border-radius:22px;
+    padding:14px;border:1px solid var(--border);box-shadow:0 2px 6px var(--shadow);
+  }
+  .device-shell .device-main{display:flex;gap:10px;}
+  .device-shell .lcd{flex:1;min-width:0;height:84px;padding:8px 10px;font-size:.6rem;}
+  .device-shell .btn-col{display:flex;flex-direction:column;justify-content:center;gap:12px;}
+  .device-shell .phys-btn{
+    width:28px;height:28px;border-radius:50%;background:var(--surface);
+    border:1px solid var(--border);box-shadow:0 2px 0 var(--border);
+    font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;
+    display:flex;align-items:center;justify-content:center;color:var(--text-dim);
+    flex:none;
+  }
+  .device-mock .device-caption{flex:1;min-width:200px;font-size:.87rem;color:var(--text-dim);}
+  .device-mock .device-caption b{color:var(--text);}
+
+  /* ---------- tree / steps ---------- */
+  .path{font-family:'JetBrains Mono',monospace;font-size:.82rem;background:var(--surface-2);
+    border:1px solid var(--border);border-radius:8px;padding:8px 10px;display:inline-flex;flex-wrap:wrap;gap:6px;align-items:center;}
+  .path .arrow{color:var(--text-dim);}
+  .path .node{color:var(--accent);font-weight:700;}
+
+  /* ---------- sub-navigation inside VPET / Communication ---------- */
+  nav.subnav{display:flex;flex-wrap:wrap;gap:6px;padding:5px;background:var(--surface-2);border:1px solid var(--border);border-radius:13px;}
+  nav.subnav button{
+    font-family:'JetBrains Mono',monospace;font-size:.74rem;font-weight:600;letter-spacing:.01em;
+    padding:7px 13px;border-radius:9px;border:1px solid transparent;
+    background:transparent;color:var(--text-dim);cursor:pointer;
+    transition:background .15s,color .15s,border-color .15s;
+  }
+  nav.subnav button:hover{color:var(--text);}
+  nav.subnav button[aria-selected="true"]{background:var(--surface);color:var(--accent);border-color:var(--border);box-shadow:0 1px 2px var(--shadow);}
+  .subpanel{display:flex;flex-direction:column;gap:18px;}
+  .subpanel[hidden]{display:none;}
+  h3.sub-head{font-family:'JetBrains Mono',monospace;font-size:1.02rem;margin:0 0 2px;}
+
+  /* ---------- connection / flow diagrams ---------- */
+  .flow{display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:center;padding:18px 14px;background:var(--surface-2);border:1px solid var(--border);border-radius:14px;}
+  .flow .node{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:10px 14px;text-align:center;min-width:112px;}
+  .flow .node b{display:block;font-family:'JetBrains Mono',monospace;font-size:.78rem;margin-bottom:3px;}
+  .flow .node span{display:block;color:var(--text-dim);font-size:.68rem;}
+  .flow .node.accent{border-color:var(--accent);background:var(--accent-soft);}
+  .flow .node.accent b{color:var(--accent);}
+  .flow .arrow2{color:var(--accent);font-size:1.15rem;font-weight:700;flex:none;font-family:'JetBrains Mono',monospace;}
+
+  /* ---------- ADAPTER screen simulation (recreated from AdapterScreen.cpp's own draw code, not a live capture) ---------- */
+  .adapter-screen{
+    width:100%;max-width:280px;background:#101010;border-radius:8px;overflow:hidden;
+    font-family:'JetBrains Mono',monospace;border:1px solid var(--border);box-shadow:0 2px 8px var(--shadow);
+    display:flex;flex-direction:column;
+  }
+  .adapter-screen .ad-head{
+    position:relative;background:#292929;display:flex;align-items:center;justify-content:space-between;
+    padding:8px 10px 8px 14px;border-bottom:2px solid #ff3b30;
+  }
+  .adapter-screen .ad-head{border-bottom-color:var(--sim-accent,#ff3b30);}
+  .adapter-screen .ad-head::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--sim-accent,#ff3b30);}
+  .adapter-screen .ad-title{color:#fff;font-size:.8rem;font-weight:700;letter-spacing:.02em;}
+  .adapter-screen .ad-badges{display:flex;gap:4px;}
+  .adapter-screen .ad-badge{font-size:.56rem;background:#2451ff;color:#fff;padding:2px 7px;border-radius:4px;font-weight:700;}
+  .adapter-screen .ad-badge.red{background:#ff3b30;}
+  .adapter-screen .ad-body{padding:9px 10px;display:flex;flex-direction:column;gap:8px;}
+  .adapter-screen .ad-card{background:#292929;border:1px solid #525a52;border-radius:6px;padding:7px 9px;}
+  .adapter-screen .ad-label{font-size:.6rem;color:#8a948a;letter-spacing:.04em;}
+  .adapter-screen .ad-row{display:flex;align-items:center;gap:6px;margin-top:3px;}
+  .adapter-screen .ad-dot{width:9px;height:9px;border-radius:50%;flex:none;}
+  .adapter-screen .ad-status{font-size:.68rem;font-weight:700;}
+  .adapter-screen .ad-info{font-size:.64rem;color:#fff;margin-top:6px;}
+  .adapter-screen .ad-foot{padding:0 10px 8px;font-size:.56rem;color:#8a948a;}
+  .sim-caption{text-align:center;font-size:.74rem;color:var(--text-dim);font-family:'JetBrains Mono',monospace;margin-top:6px;}
+
+  /* ---------- carousel-style list screen simulation (CarouselMenuScreen.h's own draw code: MAIN MENU, SETTING, COMMS MENU, ALPHACOM/DIGIROM lists) ---------- */
+  .carousel-screen{
+    width:100%;max-width:280px;background:#0a0a0a;border-radius:8px;overflow:hidden;
+    font-family:'JetBrains Mono',monospace;border:1px solid var(--border);box-shadow:0 2px 8px var(--shadow);
+    display:flex;flex-direction:column;
+  }
+  .carousel-screen .cs-bar{background:#211f24;color:#9aa39a;font-size:.58rem;letter-spacing:.03em;padding:5px 9px;display:flex;justify-content:space-between;align-items:center;}
+  .carousel-screen .cs-batt{width:16px;height:8px;border:1px solid #fff;border-radius:1px;position:relative;flex:none;}
+  .carousel-screen .cs-batt::after{content:"";position:absolute;right:-3px;top:2px;width:2px;height:4px;background:#fff;}
+  .carousel-screen .cs-batt i{display:block;height:100%;background:#00e000;width:65%;}
+  .carousel-screen .cs-list{padding:10px 12px;display:flex;flex-direction:column;gap:5px;align-items:center;}
+  .carousel-screen .cs-card{width:90%;text-align:center;border-radius:5px;padding:4px 6px;background:#292929;color:#bdbebd;font-size:.58rem;}
+  .carousel-screen .cs-card.active{width:100%;background:#0069d5;color:#fff;font-size:.72rem;font-weight:700;border:1px solid #00e5ff;padding:8px 6px;}
+  .carousel-screen .cs-foot{background:#211f24;color:#fff;font-size:.48rem;text-align:center;padding:4px 6px;}
+
+  /* ---------- real simulator screenshots ---------- */
+  .shot-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  @media (max-width:560px){.shot-grid{grid-template-columns:1fr;}}
+  figure.shot{margin:0;border:1px solid var(--border);border-radius:12px;overflow:hidden;background:var(--surface-2);box-shadow:0 1px 2px var(--shadow);}
+  figure.shot img{display:block;width:100%;height:auto;image-rendering:pixelated;}
+  figure.shot figcaption{padding:7px 12px;font-size:.74rem;color:var(--text-dim);font-family:'JetBrains Mono',monospace;border-top:1px solid var(--border);background:var(--surface);}
+
+  footer.credit{margin-top:36px;padding-top:16px;border-top:1px solid var(--border);color:var(--text-dim);font-size:.78rem;}
+
+  details.sub{border:1px solid var(--border);border-radius:10px;padding:0;overflow:hidden;background:var(--surface);}
+  details.sub summary{
+    cursor:pointer;padding:11px 14px;font-family:'JetBrains Mono',monospace;font-size:.84rem;font-weight:600;
+    list-style:none;display:flex;align-items:center;justify-content:space-between;
+  }
+  details.sub summary::-webkit-details-marker{display:none;}
+  details.sub summary::after{content:"+";color:var(--accent);font-size:1rem;}
+  details.sub[open] summary::after{content:"\2212";}
+  details.sub .inner{padding:0 14px 14px;font-size:.88rem;}
+  details.sub .inner p{margin:0 0 8px;}
+  details.sub .inner ul{margin:6px 0 0;padding-left:1.3em;}
+  details.sub .inner li{margin-bottom:4px;}
+  details.sub + details.sub{margin-top:8px;}
+</style>
+
+</head>
+<body>
+<div class="wrap">
+
+  <header class="top">
+    <img src="diginode-logo.png" alt="DIGINODE" class="logo-img">
+    <div class="titles">
+      <h1 class="sr-only">DIGINODE — Panduan Pengguna</h1>
+      <p class="kicker">Panduan Pengguna</p>
+      <p>VPet Companion</p>
+    </div>
+    <a class="flasher-link" href="flasher/">Web Flasher &rarr;</a>
+  </header>
+
+  <nav class="tabs" id="tabNav" aria-label="Bagian panduan"></nav>
+
+  <main id="panels">
+
+  <!-- ============================================================ OVERVIEW ============================================================ -->
+  <section class="panel" id="panel-overview">
+    <div>
+      <h2 class="sect-title">Tentang Diginode</h2>
+      <p class="lede">Diginode adalah kloning firmware Digimon V-Pet (gaya "Pendulum Color") yang berjalan di mikrokontroler ESP32. Satu unit menyimpan satu Digimon aktif yang perlu dirawat, dilatih, dan dievolusikan, lengkap dengan battle dan jogress — baik secara offline maupun dengan menghubungkannya ke perangkat lain.</p>
+    </div>
+
+    <div class="device-mock">
+      <div class="device-shell">
+        <div class="device-main">
+          <div class="lcd">
+            <div class="row"><span>AGUMON</span><span class="dim">III</span></div>
+            <div class="row dim"><span>HP&nbsp;100%</span><span>DP 42/50</span></div>
+          </div>
+          <div class="btn-col">
+            <div class="phys-btn">A</div>
+            <div class="phys-btn">B</div>
+          </div>
+        </div>
+      </div>
+      <div class="device-caption">
+        <p style="margin:0 0 8px;"><b>Perangkat keras utama:</b></p>
+        <ul style="margin:0;padding-left:1.2em;">
+          <li>Layar TFT kecil (135×240 atau 170×320) menampilkan Digimon, ikon menu, dan jam.</li>
+          <li>2 tombol fisik — <b>BTN1</b> dan <b>BTN2</b> — mengendalikan semua navigasi.</li>
+          <li>Dua port inframerah ("prong") di bagian atas &amp; bawah untuk tempel-ke-tempel dengan alat lain.</li>
+          <li>Speaker piezo kecil untuk bunyi, serta baterai dengan indikator persen di layar.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Tampilan layar sungguhan <span class="tag">dari simulator resmi</span></h3>
+      <p>Cuplikan ini diambil langsung dari simulator browser proyek VPet Companion (mesin game yang sama persis dengan firmware), bukan reka-reka.</p>
+      <div class="shot-grid">
+        <figure class="shot">
+          <img src="shots/01_egg_chooser.png" alt="Pemilih telur pertama kali">
+          <figcaption>Pemilih telur — tampil otomatis saat belum ada Digimon tersimpan</figcaption>
+        </figure>
+        <figure class="shot">
+          <img src="shots/02_home.png" alt="Layar utama dengan Digimon aktif">
+          <figcaption>Layar utama — Digimon aktif berjalan-jalan, tanpa menu terbuka</figcaption>
+        </figure>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Struktur menu besar</h3>
+      <p>Saat sedang menampilkan Digimon (layar utama) atau jam, tahan <span class="key hold">Tahan B</span> untuk membuka <b>MAIN MENU</b>. Dari sana semua fitur bercabang jadi tiga:</p>
+      <div class="path">
+        <span class="node">MAIN MENU</span><span class="arrow">→</span>
+        <span class="node">VPET</span><span class="arrow">/</span>
+        <span class="node">COMMUNICATION</span><span class="arrow">/</span>
+        <span class="node">SETTING</span>
+      </div>
+      <ul>
+        <li><b>VPET</b> — kembali ke layar Digimon, tempat menu perawatan harian dibuka. Rinciannya ada di tab <b>VPET</b> sendiri (Status, Rawat, Latihan &amp; Evolusi, Battle).</li>
+        <li><b>COMMUNICATION</b> — fitur pertukaran data &amp; koneksi ke perangkat lain. Rinciannya ada di tab <b>Communication</b> sendiri (Adapter, A-Com, Alphacom, Digirom, WiFi).</li>
+        <li><b>SETTING</b> — suara, kecerahan, jam, reset data, matikan perangkat (tab Setting).</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h3>Mulai cepat <span class="tag">pertama kali</span></h3>
+      <ol>
+        <li>Saat pertama kali dinyalakan (belum ada Digimon tersimpan), layar langsung menampilkan <b>pemilih telur</b>. Tekan <span class="key a">A</span> untuk bergeser antar telur, lalu <span class="key">B</span> untuk menetaskannya.</li>
+        <li>Rawat Digimon setiap hari: beri makan dan vitamin (menu FOOD), bersihkan kotoran (FLUSH), obati bila sakit/luka (HEAL), dan nyala/matikan lampu malam (LIGHTS).</li>
+        <li>Latih secara rutin lewat menu TRAINING agar statnya naik dan evolusi berjalan baik.</li>
+        <li>Setelah mencapai Stage III (Child/Rookie) ke atas, menu BATTLE dan JOGRES mulai bisa dipakai.</li>
+        <li>Atur jam, suara, dan kecerahan lewat <span class="node">MAIN MENU → SETTING</span>.</li>
+      </ol>
+    </div>
+
+    <div class="callout tip">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg>
+      <div><b>Catatan</b>Proyek ini terus dikembangkan. Battle dan jogress antar-Diginode lewat IR (DIGINODE &gt; PRONG, JOGRES &gt; CONNECT) belum didukung. Battle langsung ke mainan asli lewat BANDAI sudah diuji dan berjalan di beberapa mainan nyata — lihat daftarnya di tab VPET, sub-tab Battle. Battle lewat WIFI untuk sekarang baru bisa antar sesama Diginode dalam satu jaringan; battle online lintas internet masih dalam pengembangan.</div>
+    </div>
+  </section>
+
+  <!-- ============================================================ CONTROL ============================================================ -->
+  <section class="panel" id="panel-control" hidden>
+    <div>
+      <h2 class="sect-title">Tombol &amp; Kontrol</h2>
+      <p class="lede">Diginode hanya punya dua tombol fisik, tetapi kombinasi tekan-pendek dan tekan-tahan menghasilkan tiga perintah logis: A, B, dan C.</p>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Tombol fisik</th><th>Aksi</th><th>Artinya</th></tr></thead>
+        <tbody>
+          <tr><td class="mono-cell"><span class="key">BTN1</span> tekan singkat</td><td class="mono-cell"><span class="key a">A</span></td><td>Lanjut / geser pilihan ke item berikutnya. Saat hitungan latihan atau battle berjalan, A juga jadi tombol "goyang" (ditekan berulang secepat mungkin).</td></tr>
+          <tr><td class="mono-cell"><span class="key">BTN1</span> tahan ~0.35 dtk</td><td class="mono-cell"><span class="key">C</span></td><td>Kembali / batal — naik satu level menu, atau menutup menu jika sudah di level teratas.</td></tr>
+          <tr><td class="mono-cell"><span class="key">BTN2</span> tekan singkat</td><td class="mono-cell"><span class="key">B</span></td><td>Konfirmasi / masuk submenu / jalankan aksi yang sedang dipilih. Saat Digimon makan, dibersihkan, atau diobati, B juga melewati (skip) animasinya.</td></tr>
+          <tr><td class="mono-cell"><span class="key">BTN2</span> tahan ~0.35 dtk</td><td class="mono-cell">Buka Menu Utama</td><td>Hanya berlaku dari layar Digimon atau layar jam — langsung membuka <span class="node">MAIN MENU</span>.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <figure class="shot" style="max-width:420px;">
+      <img src="shots/03_menu_icons.png" alt="Bar ikon menu 8 slot saat baru dibuka, STATUS terpilih">
+      <figcaption>Menu baru dibuka dengan A — 8 ikon melingkari layar, STATUS (jam pasir) terpilih duluan</figcaption>
+    </figure>
+
+    <div class="grid-2">
+      <div class="card">
+        <h3>Membuka &amp; menutup menu rawat</h3>
+        <ul>
+          <li>Dari layar utama, tekan <span class="key a">A</span> sekali untuk membuka menu 7-slot (STATUS/FOOD/TRAINING/BATTLE/FLUSH/LIGHTS/HEAL).</li>
+          <li>Tekan <span class="key a">A</span> lagi untuk bergeser ke slot berikutnya; setelah slot terakhir, menu tertutup otomatis.</li>
+          <li>Tekan <span class="key">B</span> untuk membuka submenu slot terpilih atau menjalankan aksinya.</li>
+          <li>Tekan <span class="key">C</span> untuk naik satu level, atau menutup menu dari level teratas.</li>
+          <li>Menu yang dibiarkan menyala <b>60 detik</b> tanpa tombol apa pun ditutup otomatis, kembali ke layar biasa.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Gestur khusus</h3>
+        <ul>
+          <li><b>A + B bersamaan</b> (dalam 0.4 detik) saat Digimon dalam keadaan mati langsung membuka pemilih <b>CHANGE</b> (ganti ke slot cadangan atau telur baru) tanpa harus membuka menu dulu.</li>
+          <li>Saat pemilih telur/cadangan terbuka: <span class="key a">A</span> = berikutnya, <span class="key">B</span> = pilih, <span class="key">C</span> = sebelumnya.</li>
+          <li>Saat menjelajah ALBUM (ensiklopedia spesies): <span class="key a">A</span> = lanjut terus (tidak bisa mundur), <span class="key">B</span> atau <span class="key">C</span> = keluar.</li>
+          <li>Menu STATUS tidak bisa ditutup dengan B (B tidak melakukan apa-apa di halaman status) — gunakan <span class="key">C</span> atau biarkan idle 60 detik.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="callout warn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4M12 17h.01M10.3 3.9 2.7 17a2 2 0 0 0 1.7 3h15.2a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/></svg>
+      <div><b>Saat Digimon tidur</b>Hanya menu STATUS dan LIGHTS yang bisa dibuka selagi Digimon sedang tidur. Slot menu lain dilewati otomatis saat ditekan A, dan menu yang sudah terbuka akan tertutup sendiri begitu Digimon tertidur.</div>
+    </div>
+  </section>
+
+  <!-- ============================================================ VPET ============================================================ -->
+  <section class="panel" id="panel-vpet" hidden>
+    <div>
+      <h2 class="sect-title">VPET</h2>
+      <p class="lede">Cabang pertama MAIN MENU — ini layar Digimon itu sendiri, tempat semua perawatan, latihan, evolusi, dan battle harian berlangsung lewat menu 7-slot (lihat tab Kontrol untuk cara bukanya).</p>
+    </div>
+
+    <nav class="subnav" aria-label="Sub-bagian VPET">
+      <button type="button" data-sub="status">Status</button>
+      <button type="button" data-sub="care">Rawat</button>
+      <button type="button" data-sub="train">Latihan &amp; Evolusi</button>
+      <button type="button" data-sub="battle">Battle</button>
+    </nav>
+
+    <div class="subpanel" data-sub="status">
+    <h3 class="sub-head">Menu STATUS</h3>
+    <p class="lede">Slot pertama (ikon paling kiri) membuka 6 halaman data Digimon. Tekan <span class="key a">A</span> untuk bergeser antar halaman — B tidak melakukan apa pun di sini, jadi aman untuk hanya "melihat-lihat".</p>
+
+    <div class="grid-2">
+      <div class="card">
+        <h3>P1 <span class="tag">AGE / WEIGHT</span></h3>
+        <p>Umur Digimon (dalam tahun permainan) dan berat badannya dalam gram. Berat naik saat makan/vitamin dan turun sedikit setiap sesi latihan atau battle.</p>
+      </div>
+      <div class="card">
+        <h3>P2 <span class="tag">HUNGRY / STRENGTH</span></h3>
+        <p>Dua baris hati, masing-masing 4 slot: <b>Hungry</b> (isi dengan MEAT) dan <b>Strength</b> (isi dengan VITAMIN). Kosong total membuat Digimon "memanggil" minta dirawat.</p>
+      </div>
+      <div class="card">
+        <h3>P3 <span class="tag">EFFORT / CONDITION</span></h3>
+        <p><b>Effort</b> naik dari sesi TRAINING. <b>Condition</b> (mood/kesehatan umum) turun setiap kali ada "kesalahan rawat" (care mistake) dan jumlah slotnya bertambah seiring Digimon naik stage (2 slot di Baby, 3 di Child, 4 di Adult ke atas).</p>
+      </div>
+      <div class="card">
+        <h3>P4 <span class="tag">WIN RATE</span></h3>
+        <p>Persentase kemenangan battle, plus rincian jumlah Win dan Loss sepanjang umur Digimon ini.</p>
+      </div>
+      <div class="card">
+        <h3>P5 <span class="tag">DP</span></h3>
+        <p>Jatah battle (Digimon Point) dengan bar hijau/merah. Setiap battle memotong 1 DP; batas maksimum tergantung stage (lihat tabel di tab Battle). DP habis = tidak bisa battle sampai terisi lagi lewat VITAMIN.</p>
+      </div>
+      <div class="card">
+        <h3>P6 <span class="tag">TYPE / FLAGS</span></h3>
+        <p>Atribut (Free/Vaccine/Data/Virus) serta dua status <b>Battle</b> dan <b>Jogress</b> — YES (hijau) atau NO (merah) lengkap dengan alasannya, misalnya "Need Stage III" atau "No jogress line".</p>
+      </div>
+    </div>
+
+    <div class="shot-grid">
+      <figure class="shot">
+        <img src="shots/04_status_p1.png" alt="Halaman STATUS P1: AGE dan WEIGHT">
+        <figcaption>P1 — AGE / WEIGHT</figcaption>
+      </figure>
+      <figure class="shot">
+        <img src="shots/05_status_p6_flags.png" alt="Halaman STATUS P6: Type, Battle, Jogress">
+        <figcaption>P6 — Type: Va (Vaccine), Battle: YES, Jogress: YES</figcaption>
+      </figure>
+    </div>
+    <p class="lede" style="margin-top:-8px;">Kode singkat atribut di P6: <span class="mono">Fr</span>=Free, <span class="mono">Va</span>=Vaccine, <span class="mono">Da</span>=Data, <span class="mono">Vi</span>=Virus.</p>
+    </div>
+
+    <div class="subpanel" data-sub="care" hidden>
+    <h3 class="sub-head">Merawat Digimon</h3>
+    <p class="lede">Empat slot menu menangani perawatan harian: FOOD, FLUSH, HEAL, dan LIGHTS.</p>
+
+    <details class="sub" open>
+      <summary>FOOD — Makan &amp; Vitamin</summary>
+      <div class="inner">
+        <p>Buka slot FOOD, lalu <span class="key a">A</span> untuk memilih <b>MEAT</b> (daging) atau <b>VITAMIN</b>, dan <span class="key">B</span> untuk memberikannya.</p>
+        <ul>
+          <li><b>MEAT</b> mengisi satu slot hati Hungry (maksimum 4) dan menambah sedikit berat badan.</li>
+          <li><b>VITAMIN</b> mengisi satu slot hati Strength <i>dan</i> menambah 1 DP (sampai batas maksimum stage-nya) — ini satu-satunya cara mengisi ulang DP.</li>
+          <li>Memberi vitamin 4 kali berturut-turut tanpa diseling latihan sedikit menaikkan risiko luka pada battle berikutnya — seling dengan TRAINING.</li>
+          <li>Digimon yang sedang sakit menolak makan sampai diobati lebih dulu.</li>
+        </ul>
+        <figure class="shot" style="max-width:360px;">
+          <img src="shots/06_food_icons.png" alt="Submenu FOOD: ikon daging dan vitamin dengan panah penunjuk">
+          <figcaption>Submenu FOOD — panah hitam menunjuk pilihan yang aktif (MEAT di sini)</figcaption>
+        </figure>
+      </div>
+    </details>
+
+    <details class="sub">
+      <summary>FLUSH — Membersihkan kotoran</summary>
+      <div class="inner">
+        <p>Kotoran muncul otomatis seiring waktu (lebih sering di stage awal). Buka slot FLUSH dan tekan <span class="key">B</span> untuk membersihkannya.</p>
+        <p>Kalau dibiarkan menumpuk sampai 8 kali tanpa dibersihkan, Digimon otomatis jatuh <b>sakit</b> — jadi jangan ditunda terlalu lama.</p>
+      </div>
+    </details>
+
+    <details class="sub">
+      <summary>HEAL — Obat &amp; Perban</summary>
+      <div class="inner">
+        <p>Buka slot HEAL, <span class="key a">A</span> untuk memilih <b>MEDICINE</b> (obat, untuk Sick) atau <b>BANDAGE</b> (perban, untuk Injured), lalu <span class="key">B</span> untuk memberikannya.</p>
+        <ul>
+          <li><b>Sick</b> biasanya muncul karena kotoran menumpuk atau dibiarkan terlalu lama — sembuh dengan MEDICINE.</li>
+          <li><b>Injured</b> punya kemungkinan muncul setiap kali battle kalah (persentasenya naik kalau Digimon sering diabaikan, dan turun kalau sering menang battle atau rutin dilatih) — sembuh dengan BANDAGE.</li>
+          <li>Kedua kondisi ini bisa <b>fatal</b> jika dibiarkan terlalu lama (sekitar 6 jam) atau kambuh terlalu sering (12 kali) — jangan ditunda.</li>
+        </ul>
+      </div>
+    </details>
+
+    <details class="sub">
+      <summary>LIGHTS — Lampu, Cold Mode, Change, Album</summary>
+      <div class="inner">
+        <p>Slot ini punya 4 pilihan, digeser dengan <span class="key a">A</span>:</p>
+        <ul>
+          <li><b>LIGHTS</b> — menyala/matikan "lampu kamar" Digimon. Menyalakannya saat Digimon tidur akan membangunkannya (sedikit menaikkan risiko luka) dan ia tetap terjaga selama 15 menit sebelum kembali tidur sesuai jadwal jam.</li>
+          <li><b>COLD MODE</b> — membekukan Digimon aktif: statistik dan jam berhenti berjalan untuknya (jam perangkat sendiri tetap jalan). Cocok dipakai saat ingin "menitipkan" Digimon tanpa risiko lapar/sakit selama dibawa-bawa. Semua aksi rawat dan battle terkunci selama Cold Mode aktif.</li>
+          <li><b>CHANGE</b> — menukar Digimon aktif dengan salah satu slot cadangan (maksimum 2 cadangan lain berjalan paralel), atau menetaskan telur baru dari keluarga manapun yang sudah terbuka.</li>
+          <li><b>ALBUM</b> — menjelajah seluruh daftar spesies yang pernah terdata di firmware, gaya "Pokedex": hanya maju, tidak ada tombol mundur.</li>
+        </ul>
+        <figure class="shot" style="max-width:360px;">
+          <img src="shots/07_lights_list.png" alt="Submenu LIGHTS dengan daftar LIGHTS, COLD MODE, CHANGE">
+          <figcaption>Submenu LIGHTS — daftar LIGHTS / COLD MODE / CHANGE (ALBUM di bawahnya)</figcaption>
+        </figure>
+      </div>
+    </details>
+
+    <div class="callout danger">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M15 9l-6 6M9 9l6 6"/></svg>
+      <div><b>Jangan sampai mati</b>Digimon bisa mati jika: kelaparan dibiarkan terlalu lama (kelaparan terus-menerus), Sick/Injured dibiarkan lebih dari ±6 jam, atau Sick/Injured kambuh 12 kali. Jika sudah terlanjur mati, tekan <span class="key a">A</span>+<span class="key">B</span> bersamaan untuk langsung membuka pemilih ganti Digimon.</div>
+    </div>
+    </div>
+
+    <div class="subpanel" data-sub="train" hidden>
+    <h3 class="sub-head">Latihan, Evolusi &amp; Jogress</h3>
+    <p class="lede">Slot ketiga (TRAINING) menaikkan statistik lewat mini-game goyang; evolusi dan jogress berjalan di atas statistik dan kondisi yang terkumpul dari situ.</p>
+
+    <div class="card">
+      <h3>Mini-game TRAINING</h3>
+      <ol>
+        <li>Buka slot TRAINING dan tekan <span class="key">B</span> untuk mulai.</li>
+        <li>Saat fase hitungan (COUNT) berjalan, tekan <span class="key a">A</span> berulang-ulang secepat mungkin — ini "menggoyang" Digimon.</li>
+        <li>Semakin banyak &amp; semakin cepat goyangan terkumpul, semakin tinggi warna indikator yang dicapai dan semakin besar kenaikan Strength/Effort yang didapat, dengan sedikit pengurangan berat badan.</li>
+        <li>Latihan yang bagus juga menurunkan sedikit risiko luka (injury rate) untuk battle berikutnya.</li>
+      </ol>
+    </div>
+
+    <div class="card">
+      <h3>Tangga evolusi</h3>
+      <p>Setiap Digimon melewati 7 tahap, ditulis dengan angka Romawi di layar:</p>
+      <div class="path">
+        <span class="node">I</span><span class="arrow">Baby I</span>
+        <span class="arrow">→</span><span class="node">II</span><span class="arrow">Baby II</span>
+        <span class="arrow">→</span><span class="node">III</span><span class="arrow">Child</span>
+        <span class="arrow">→</span><span class="node">IV</span><span class="arrow">Adult</span>
+        <span class="arrow">→</span><span class="node">V</span><span class="arrow">Perfect</span>
+        <span class="arrow">→</span><span class="node">VI</span><span class="arrow">Ultimate</span>
+        <span class="arrow">→</span><span class="node">VI+</span><span class="arrow">Super Ultimate</span>
+      </div>
+      <p>Evolusi berjalan otomatis (dengan animasi tirai) begitu umur di stage saat ini dan statistik perawatannya memenuhi syarat jalur evolusi Digimon tersebut. Perawatan yang buruk (banyak kesalahan rawat, sering sakit) bisa membuat evolusi "gagal" dan mengarah ke bentuk yang kurang ideal, bukan berhenti sama sekali.</p>
+    </div>
+
+    <div class="card">
+      <h3>Jogress (penggabungan)</h3>
+      <p>Jogress menggabungkan Digimon aktif dengan Digimon lain menjadi satu bentuk evolusi baru. Ada di slot BATTLE, cabang <span class="node">JOGRES</span>:</p>
+      <ul>
+        <li><b>JOGRES &gt; BACKUP</b> — memilih salah satu slot cadangan sendiri sebagai partner. Jika kombinasinya valid, jogress langsung terjadi dan Digimon cadangan tersebut <b>terpakai habis</b> (hilang setelah jogress).</li>
+        <li><b>JOGRES &gt; CONNECT</b> — menghubungkan ke perangkat lain untuk jogress langsung dengan Digimon di perangkat tersebut. Lewat prong IR <b>belum didukung</b> untuk sekarang; gunakan JOGRES &gt; BACKUP di atas sebagai alternatif.</li>
+      </ul>
+      <p>Jogress hanya tersedia bila Digimon aktif punya "jalur jogress" terdaftar (lihat flag Jogress di halaman STATUS P6) dan sedang tidak sakit/tidur/Cold Mode.</p>
+    </div>
+    </div>
+
+    <div class="subpanel" data-sub="battle" hidden>
+    <h3 class="sub-head">Battle &amp; Quest</h3>
+    <p class="lede">Slot keempat membuka dua cabang: <span class="node">BATTLE</span> (lawan komputer atau perangkat lain) dan <span class="node">JOGRES</span> (lihat sub-tab Latihan &amp; Evolusi). Battle baru bisa dipakai mulai Stage III (Child) dan memotong 1 DP setiap kali dimainkan.</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Stage</th><th>Maks. DP</th></tr></thead>
+        <tbody>
+          <tr><td>I – II (Baby)</td><td>Tidak ada DP, tidak bisa battle</td></tr>
+          <tr><td>III – V (Child / Adult / Perfect)</td><td>50</td></tr>
+          <tr><td>VI (Ultimate)</td><td>60</td></tr>
+          <tr><td>VI+ (Super Ultimate)</td><td>70</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <details class="sub" open>
+      <summary>BATTLE &gt; QUEST — melawan komputer</summary>
+      <div class="inner">
+        <p>Daftar AREA 1, 2, 3, … terbuka satu per satu — menang di satu AREA membuka AREA berikutnya. Setiap battle berjalan dengan pola yang sama:</p>
+        <ol>
+          <li>Tekan <span class="key">B</span> pada AREA yang dipilih untuk memulai.</li>
+          <li>Saat fase hitungan (COUNT) muncul, goyang dengan menekan <span class="key a">A</span> berulang — ini menentukan seberapa kuat serangan pertama.</li>
+          <li>Pertarungan berjalan otomatis bergilir, dipengaruhi statistik dan keunggulan atribut (lihat segitiga di bawah).</li>
+          <li>Hasil (menang/kalah) ditampilkan, lalu kembali ke menu BATTLE.</li>
+        </ol>
+      </div>
+    </details>
+
+    <details class="sub">
+      <summary>BATTLE &gt; CONNECT — melawan perangkat lain</summary>
+      <div class="inner">
+        <p>Memilih item di sini hanya <i>mencatat permintaan</i> koneksi — perangkat akan mulai menghubungkan begitu kembali ke layar utama.</p>
+        <figure class="shot" style="max-width:360px;">
+          <img src="shots/08_connect_bandai_list.png" alt="Submenu CONNECT dengan daftar DIGINODE dan BANDAI, header W0 L0 DP50">
+          <figcaption>Submenu CONNECT — header menampilkan rekor (W/L) &amp; DP, daftar DIGINODE / BANDAI di bawahnya</figcaption>
+        </figure>
+        <div class="path"><span class="node">CONNECT</span><span class="arrow">→</span><span class="node">DIGINODE</span><span class="arrow">→</span><span>PRONG / WIFI</span></div>
+        <div class="path"><span class="node">CONNECT</span><span class="arrow">→</span><span class="node">BANDAI</span><span class="arrow">→</span><span>PENDULUM COLOR / DIGIMON COLOR / MONO OTHER</span></div>
+        <ul>
+          <li><b>DIGINODE &gt; PRONG</b> — rencananya battle melawan Diginode lain lewat sentuhan prong IR (atas/bawah sesuai setting PRONG). <b>Belum didukung</b> di Diginode untuk sekarang.</li>
+          <li><b>DIGINODE &gt; WIFI</b> — battle yang sama tetapi lewat jaringan WiFi. Saat ini baru bisa antar-Diginode yang berada di jaringan WiFi yang sama; battle online lintas internet (lewat wificom.dev, lihat tab Communication) masih dalam pengembangan.</li>
+          <li><b>BANDAI &gt; PENDULUM COLOR / DIGIMON COLOR</b> — battle melawan mainan V-Pet Bandai asli dengan menempelkan prong. Goyang dulu seperti mainan asli, lalu tunggu balasan dari perangkat tersebut.</li>
+          <li><b>BANDAI &gt; MONO OTHER</b> — mode kompatibilitas untuk berbicara dengan Digimon generasi lama (hitam-putih/"Mono").</li>
+        </ul>
+
+        <div class="card" style="margin-top:4px;">
+          <h3>Perangkat asli yang sudah teruji battle/jogress lewat BANDAI</h3>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Jenis</th><th>Model yang sudah dicoba</th></tr></thead>
+              <tbody>
+                <tr><td>Mono (hitam-putih)</td><td>Digimon 20th, DMX</td></tr>
+                <tr><td>Color</td><td>Pendulum Color, Digimon Color</td></tr>
+                <tr><td>Digivice</td><td>D2 Color 25th, D3 Color, D-Ark Color</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p>Model lain di luar daftar ini kemungkinan besar tetap jalan selama protokolnya sejenis, tapi belum dicoba langsung.</p>
+        </div>
+      </div>
+    </details>
+
+    <div class="card">
+      <h3>Segitiga keunggulan atribut</h3>
+      <div class="path">
+        <span class="node">Vaccine</span><span class="arrow">unggul atas</span>
+        <span class="node">Virus</span><span class="arrow">unggul atas</span>
+        <span class="node">Data</span><span class="arrow">unggul atas</span>
+        <span class="node">Vaccine</span>
+      </div>
+      <p style="margin-top:8px;">Atribut <b>Free</b> netral terhadap ketiganya — tidak mendapat maupun memberi bonus kerusakan.</p>
+    </div>
+
+    <div class="callout tip">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg>
+      <div><b>Tips</b>Pesan <span class="mono">CAN'T BATTLE</span> berarti DP sudah 0 atau Digimon belum Stage III. Isi DP lewat VITAMIN, atau tunggu evolusi berikutnya.</div>
+    </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ COMMUNICATION ============================================================ -->
+  <section class="panel" id="panel-communication" hidden>
+    <div>
+      <h2 class="sect-title">Communication</h2>
+      <p class="lede">Cabang kedua MAIN MENU — dibuka lewat <span class="node">MAIN MENU → COMMUNICATION</span> (tahan <span class="key hold">Tahan B</span> dari layar utama). Berisi semua fitur pertukaran data dan kompatibilitas dengan mainan V-Pet asli maupun internet.</p>
+    </div>
+
+    <nav class="subnav" aria-label="Sub-bagian Communication">
+      <button type="button" data-sub="adapter">Adapter</button>
+      <button type="button" data-sub="acom">A-Com</button>
+      <button type="button" data-sub="alphacom">Alphacom</button>
+      <button type="button" data-sub="digirom">Digirom</button>
+      <button type="button" data-sub="wifi">WiFi</button>
+    </nav>
+
+    <div class="subpanel" data-sub="adapter">
+      <h3 class="sub-head">ADAPTER — jembatan Mono ⇄ Color</h3>
+      <p class="lede">Fitur ini membuat Diginode jadi penerjemah protokol: menjembatani mainan V-Pet Mono (generasi hitam-putih lama) dan mainan Pendulum Color asli supaya keduanya bisa battle satu sama lain, padahal secara protokol aslinya tidak saling kompatibel.</p>
+
+      <div class="flow">
+        <div class="node"><b>Mainan MONO</b><span>hitam-putih, generasi lama</span></div>
+        <span class="arrow2">⇄</span>
+        <div class="node accent"><b>DIGINODE</b><span>mode ADAPTER</span></div>
+        <span class="arrow2">⇄</span>
+        <div class="node"><b>Mainan COLOR</b><span>Pendulum Color asli</span></div>
+      </div>
+
+      <div class="card">
+        <h3>Cara menyambungkan</h3>
+        <ol>
+          <li>Buka <span class="node">COMMUNICATION → ADAPTER</span> di Diginode.</li>
+          <li>Tempelkan mainan <b>Mono</b> (hitam-putih) ke prong <b>ATAS</b>, mainan <b>Color</b> ke prong <b>BAWAH</b>.</li>
+          <li>Layar langsung menampilkan <span class="mono">Wait Both</span> dengan petunjuk <span class="mono">Tekan C (Mono)</span> / <span class="mono">dan OK (Color)</span> — tekan tombol aksi/battle di <b>kedua mainan asli itu sendiri</b> (tombol C di mainan Mono, tombol OK di mainan Color), bukan tombol di Diginode.</li>
+          <li>Diginode mendengarkan terus sampai kedua sisi terbaca. Begitu satu sisi masuk, layar langsung menunjukkan datanya (mis. <span class="mono">M: 65</span>) sambil menunggu sisi satunya (<span class="mono">Waiting Color...</span>), disertai bunyi beep setiap satu sisi berhasil ditangkap.</li>
+          <li>Setelah <b>kedua</b> sisi terbaca, Diginode menghitung sendiri siapa yang menang (berdasarkan rasio power masing-masing), mengonversi datanya ke format tiap mainan, lalu <b>mengirim hasilnya balik ke KEDUA mainan hampir bersamaan</b>.</li>
+          <li>Animasi battle berjalan ±18 detik (durasi tetap, mengikuti mainan asli), lalu layar menampilkan <span class="mono">Battle Done!</span> + siapa yang menang, bertahan 3 detik, lalu kembali siap untuk ronde berikutnya.</li>
+        </ol>
+        <p>Tahan <span class="key hold">Tahan BTN1</span> untuk keluar dari mode ini kapan saja.</p>
+      </div>
+
+      <div>
+        <div class="shot-grid">
+          <figure class="shot">
+            <div class="adapter-screen">
+              <div class="ad-head"><span class="ad-title">ADAPTER</span><span class="ad-badge">BATTLE</span></div>
+              <div class="ad-body">
+                <div class="ad-card">
+                  <div class="ad-label">STATUS</div>
+                  <div class="ad-row"><span class="ad-dot" style="background:#ffe600"></span><span class="ad-status" style="color:#ffe600">Wait Both</span></div>
+                </div>
+                <div class="ad-card">
+                  <div class="ad-label">INFO</div>
+                  <div class="ad-info">M: 65 &nbsp;|&nbsp; Waiting Color...</div>
+                </div>
+              </div>
+              <div class="ad-foot">[HOLD BTN1] = Back</div>
+            </div>
+            <figcaption>Sisi Mono sudah terbaca (M: 65), menunggu sisi Color</figcaption>
+          </figure>
+          <figure class="shot">
+            <div class="adapter-screen">
+              <div class="ad-head"><span class="ad-title">ADAPTER</span><span class="ad-badge">BATTLE</span></div>
+              <div class="ad-body">
+                <div class="ad-card">
+                  <div class="ad-label">STATUS</div>
+                  <div class="ad-row"><span class="ad-dot" style="background:#00e676"></span><span class="ad-status" style="color:#00e676">Battle Done!</span></div>
+                </div>
+                <div class="ad-card">
+                  <div class="ad-label">INFO</div>
+                  <div class="ad-info">M: 65 vs C: 130 &nbsp;|&nbsp; Win: Color</div>
+                </div>
+              </div>
+              <div class="ad-foot">[HOLD BTN1] = Back</div>
+            </div>
+            <figcaption>Battle selesai — Color menang (power lebih besar)</figcaption>
+          </figure>
+        </div>
+        <p class="sim-caption">Simulasi tampilan, direkonstruksi persis dari kode layar <span class="mono">AdapterScreen.cpp</span> &amp; <span class="mono">main.cpp</span> — bukan screenshot langsung (layar ini firmware-only, tidak ada di simulator browser).</p>
+      </div>
+
+      <div class="callout warn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4M12 17h.01M10.3 3.9 2.7 17a2 2 0 0 0 1.7 3h15.2a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/></svg>
+        <div><b>Penting di mainan Mono-nya</b>Sebelum menempel ke prong, set dulu mainan Mono-nya ke mode battle <b>"vs OTHER"</b> (lawan Digimon beda jenis) — bukan battle normal sesama seri. Hanya mode ini yang mengirim sinyal dengan format yang bisa dibaca ADAPTER.</div>
+      </div>
+
+      <div class="callout warn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4M12 17h.01M10.3 3.9 2.7 17a2 2 0 0 0 1.7 3h15.2a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/></svg>
+        <div><b>Soal timeout tombol aksi</b>Diginode sendiri sabar menunggu sampai kedua sisi terbaca, tidak ada batas waktu dari sisinya. Tapi sebagian mainan asli (misalnya seri Digivice) punya waktu tunggu sendiri setelah tombol aksi/battle-nya ditekan, dan berhenti menunggu begitu waktu itu habis. Kalau salah satu mainan tipe begini, tekan tombol aksinya paling terakhir. Kalau kedua mainan sama-sama punya timeout, tekan tombol aksi keduanya di waktu yang hampir bersamaan.</div>
+      </div>
+    </div>
+
+    <div class="subpanel" data-sub="acom" hidden>
+      <h3 class="sub-head">A-COM</h3>
+      <p class="lede">Fitur pertukaran data ala A-Com/D-Com pada mainan V-Pet asli, dengan tiga pilihan jalur pengiriman: <b>SERIAL</b>, <b>BTCOM</b>, atau <b>WIFICOM</b>. Ketiganya berbagi tampilan layar yang sama, cuma isinya yang berbeda sesuai jalur yang dipilih.</p>
+
+      <div class="card">
+        <h3>Membaca layar A-COM</h3>
+        <ul>
+          <li><b>Judul + lencana prong</b> (merah) — port prong yang aktif saat ini (ikut setting PRONG), selalu tampil di pojok kanan atas.</li>
+          <li><b>Lencana mode</b> (biru) — jalur yang sedang dipakai: <span class="mono">SERIAL</span> / <span class="mono">BLE</span> (nama internal BTCOM) / <span class="mono">WIFI</span> (nama internal WIFICOM).</li>
+          <li><b>STATUS</b> — titik warna + kondisi koneksi saat ini (kuning = menunggu/proses, hijau = terhubung/berhasil, abu = berhenti).</li>
+          <li><b>INFO</b> — detail jalur yang aktif: alamat MAC (BTCOM), SSID/topic MQTT (WIFICOM), atau cara pakainya (SERIAL).</li>
+          <li><b>DATA</b> — data mentah terakhir, diawali <span class="mono">Rx:</span> kalau baru diterima (disertai bunyi beep) atau <span class="mono">Tx:</span> kalau baru dikirim.</li>
+        </ul>
+        <p>Tahan <span class="key hold">Tahan BTN1</span> untuk kembali ke menu Communication.</p>
+      </div>
+
+      <div class="shot-grid">
+        <figure class="shot">
+          <div class="adapter-screen" style="--sim-accent:#00e000;">
+            <div class="ad-head"><span class="ad-title">A-COM</span>
+              <div class="ad-badges"><span class="ad-badge red">ATAS</span><span class="ad-badge">SERIAL</span></div>
+            </div>
+            <div class="ad-body">
+              <div class="ad-card">
+                <div class="ad-label">STATUS</div>
+                <div class="ad-row"><span class="ad-dot" style="background:#ffe600"></span><span class="ad-status" style="color:#ffe600">Baud: 9600</span></div>
+              </div>
+              <div class="ad-card">
+                <div class="ad-label">INFO</div>
+                <div class="ad-info">Send via USB cable</div>
+              </div>
+            </div>
+            <div class="ad-foot">[H:B1] Back</div>
+          </div>
+          <figcaption>SERIAL — siap menerima/mengirim lewat kabel USB</figcaption>
+        </figure>
+        <figure class="shot">
+          <div class="adapter-screen" style="--sim-accent:#00e000;">
+            <div class="ad-head"><span class="ad-title">A-COM</span>
+              <div class="ad-badges"><span class="ad-badge red">ATAS</span><span class="ad-badge">BLE</span></div>
+            </div>
+            <div class="ad-body">
+              <div class="ad-card">
+                <div class="ad-label">STATUS</div>
+                <div class="ad-row"><span class="ad-dot" style="background:#00e676"></span><span class="ad-status" style="color:#00e676">Connected!</span></div>
+              </div>
+              <div class="ad-card">
+                <div class="ad-label">DATA</div>
+                <div class="ad-info">Rx: 4A2F0C9E1B3D</div>
+              </div>
+            </div>
+            <div class="ad-foot">[H:B1] Back</div>
+          </div>
+          <figcaption>BTCOM (BLE) — HP/perangkat lain sudah terhubung, baru menerima data</figcaption>
+        </figure>
+        <figure class="shot">
+          <div class="adapter-screen" style="--sim-accent:#00e000;">
+            <div class="ad-head"><span class="ad-title">A-COM</span>
+              <div class="ad-badges"><span class="ad-badge red">BAWAH</span><span class="ad-badge">WIFI</span></div>
+            </div>
+            <div class="ad-body">
+              <div class="ad-card">
+                <div class="ad-label">STATUS</div>
+                <div class="ad-row"><span class="ad-dot" style="background:#00e676"></span><span class="ad-status" style="color:#00e676">WiFi Connected!</span></div>
+              </div>
+              <div class="ad-card">
+                <div class="ad-label">INFO</div>
+                <div class="ad-info">IP: 192.168.1.42</div>
+              </div>
+            </div>
+            <div class="ad-foot">[H:B1] Back</div>
+          </div>
+          <figcaption>WIFICOM — sudah tersambung WiFi rumah, siap tersambung ke broker MQTT</figcaption>
+        </figure>
+      </div>
+      <p class="sim-caption">Simulasi tampilan, direkonstruksi dari kode layar <span class="mono">AcomScreen.cpp</span> &amp; <span class="mono">main.cpp</span> (teks status persis seperti aslinya) — bukan screenshot langsung.</p>
+
+      <div class="grid-2">
+        <div class="card">
+          <h3>SERIAL</h3>
+          <p>Lewat kabel USB ke komputer — cocok untuk debug atau mengirim/menerima data dari aplikasi/script di PC. Layar menunjukkan kecepatan port (<span class="mono">Baud: 9600</span>).</p>
+        </div>
+        <div class="card">
+          <h3>BTCOM</h3>
+          <p>Lewat Bluetooth Low Energy (BLE) ke HP, PC, atau perangkat lain yang mendukung BLE — tanpa kabel atau tempel prong. Status berjalan dari <span class="mono">Starting BLE...</span> → <span class="mono">Advertising...</span> (menunggu disambung) → <span class="mono">Connected!</span>, dan info menampilkan alamat MAC Diginode.</p>
+        </div>
+      </div>
+      <div class="callout tip">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg>
+        <div><b>WIFICOM</b>Jalur ketiga, lewat internet (butuh setup akun wificom.dev lebih dulu — lihat sub-tab <b>WiFi</b>). Status berjalan dari <span class="mono">Starting AP...</span> → <span class="mono">Connecting WiFi...</span> → <span class="mono">WiFi Connected!</span> → <span class="mono">MQTT Connected</span> begitu tersambung ke broker.</div>
+      </div>
+    </div>
+
+    <div class="subpanel" data-sub="alphacom" hidden>
+      <h3 class="sub-head">ALPHACOM — Wiki</h3>
+      <p class="lede">Ensiklopedia kode A-Com di dalam perangkat, disusun per kategori generasi/model mainan. Pilih kategori, lalu pilih kodenya — tiap kode punya data mentah yang langsung dikirim lewat prong begitu dipilih.</p>
+      <p>Navigasi: <span class="key a">A</span> geser kategori/kode, <span class="key">B</span> buka/kirim, <span class="key">C</span> kembali ke daftar kategori.</p>
+
+      <div class="shot-grid">
+        <figure class="shot">
+          <div class="carousel-screen">
+            <div class="cs-bar"><span>ALPHACOM WIKI</span><div class="cs-batt"><i></i></div></div>
+            <div class="cs-list">
+              <div class="cs-card">Digital Monster X</div>
+              <div class="cs-card active">Pendulum Color</div>
+              <div class="cs-card">Pendulum Cycle</div>
+              <div class="cs-card">Digital Monster 20th</div>
+            </div>
+            <div class="cs-foot">A:Pilih&nbsp;&nbsp;B:OK&nbsp;&nbsp;Tahan A:Kembali</div>
+          </div>
+          <figcaption>Daftar kategori — tiap kategori mewakili satu generasi/model mainan</figcaption>
+        </figure>
+        <figure class="shot">
+          <div class="carousel-screen">
+            <div class="cs-bar"><span>Pendulum Color</span><div class="cs-batt"><i></i></div></div>
+            <div class="cs-list">
+              <div class="cs-card">Punching Bag</div>
+              <div class="cs-card active">Jogress with Vaccine Adult 1</div>
+              <div class="cs-card">Jogress with Data Adult 1</div>
+              <div class="cs-card">Jogress with Virus Adult 1</div>
+            </div>
+            <div class="cs-foot">A:Pilih&nbsp;&nbsp;B:OK&nbsp;&nbsp;Tahan A:Kembali</div>
+          </div>
+          <figcaption>Masuk ke satu kategori — daftar kode siap dikirim lewat prong</figcaption>
+        </figure>
+      </div>
+      <p class="sim-caption">Simulasi tampilan, direkonstruksi dari kode layar <span class="mono">CarouselMenuScreen.h</span> &amp; <span class="mono">AcomWikiMenuScreen.h</span> — bukan screenshot langsung.</p>
+
+      <div class="card">
+        <h3>17 kategori, disusun per generasi mainan</h3>
+        <p>Isinya lebih ke arah "wiki" komunitas: kode reset, cara menyambung ke warna/tipe mainan tertentu, sampai pemicu jogress tertentu — dengan nama kode yang mudah dibaca manusia.</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Kategori</th><th>Contoh kode di dalamnya</th></tr></thead>
+            <tbody>
+              <tr><td>Digital Monster X</td><td class="mono-cell">Reset · Connection to a DMX1 Black</td></tr>
+              <tr><td>Pendulum Original 1998</td><td class="mono-cell">Punching Bag · Jogress with Vaccine Adult 1</td></tr>
+              <tr><td>Pendulum Color · Pendulum Cycle · Pendulum X · Pendulum Z · Pendulum 20th</td><td class="mono-cell">kode khusus tiap generasi Pendulum</td></tr>
+              <tr><td>Digital Monster 20th / Color</td><td class="mono-cell">kode khusus seri Digital Monster</td></tr>
+              <tr><td>D Ark · D2 Complete · D3 · D Cyber</td><td class="mono-cell">kode khusus seri Digivice</td></tr>
+              <tr><td>Rookie · Battle</td><td class="mono-cell">kode umum per kategori tema</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="subpanel" data-sub="digirom" hidden>
+      <h3 class="sub-head">DIGIROM</h3>
+      <p class="lede">Sama seperti ALPHACOM — kategori → daftar kode → kirim lewat prong — tapi isinya 20 kategori menurut generasi mainan yang berbeda, dan kodenya lebih ke arah <b>fungsional</b>: langsung memengaruhi jalannya game di mainan penerima, bukan sekadar informasi.</p>
+      <p>Navigasi: <span class="key a">A</span> geser kategori/kode, <span class="key">B</span> pilih/jalankan, <span class="key">C</span> kembali.</p>
+
+      <div class="shot-grid">
+        <figure class="shot">
+          <div class="carousel-screen">
+            <div class="cs-bar"><span>DIGIROM SENDER</span><div class="cs-batt"><i></i></div></div>
+            <div class="cs-list">
+              <div class="cs-card">Digimon Xros Mini</div>
+              <div class="cs-card active">Pen X</div>
+              <div class="cs-card">Digimon Colors</div>
+              <div class="cs-card">Digivice D2</div>
+            </div>
+            <div class="cs-foot">A:Pilih&nbsp;&nbsp;B:OK&nbsp;&nbsp;Tahan A:Kembali</div>
+          </div>
+          <figcaption>Daftar kategori — juga per generasi/model mainan</figcaption>
+        </figure>
+        <figure class="shot">
+          <div class="carousel-screen">
+            <div class="cs-bar"><span>Pen X</span><div class="cs-batt"><i></i></div></div>
+            <div class="cs-list">
+              <div class="cs-card">real toy wins (vs Kuwagamon X)</div>
+              <div class="cs-card active">trade meat-M</div>
+              <div class="cs-card">trade protein+</div>
+              <div class="cs-card">trade aqua orb</div>
+            </div>
+            <div class="cs-foot">A:Pilih&nbsp;&nbsp;B:OK&nbsp;&nbsp;Tahan A:Kembali</div>
+          </div>
+          <figcaption>Masuk ke satu kategori — kode fungsional siap dikirim (di sini: trade item)</figcaption>
+        </figure>
+      </div>
+      <p class="sim-caption">Simulasi tampilan, direkonstruksi dari kode layar <span class="mono">CarouselMenuScreen.h</span> &amp; <span class="mono">DigiromMenuScreen.h</span> — bukan screenshot langsung.</p>
+
+      <div class="card">
+        <h3>20 kategori, disusun per generasi mainan</h3>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Kategori</th><th>Contoh kode di dalamnya</th></tr></thead>
+            <tbody>
+              <tr><td>Digimon Xros Mini</td><td class="mono-cell">Xros Mini battle</td></tr>
+              <tr><td>Pen X</td><td class="mono-cell">real toy wins/loses (against Kuwagamon X) · trade meat-M</td></tr>
+              <tr><td>Digimon Colors · PENDULUM Colors · Pen Cycle · Pen Original · Pen Z · Pen 20th · Pen Progress</td><td class="mono-cell">kode khusus tiap generasi Pendulum/Color</td></tr>
+              <tr><td>Digivice D2 · D3 · D3 Colors · D-Scanner · Accel · iC · DataLink</td><td class="mono-cell">kode khusus tiap seri Digivice</td></tr>
+              <tr><td>Digimon 1997 · Digimon Mini · Digimon X · Digimon 20th</td><td class="mono-cell">kode khusus generasi mainan tsb.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Contoh isi kode yang sebenarnya dikirim: memaksa <b>menang/kalah</b> di battle tertentu ("real toy wins against Kuwagamon X"), mengirim item untuk <b>trade</b> (meat, protein, aqua orb, dst.), atau memicu <b>jogress</b> langsung ke Digimon tertentu.</p>
+      </div>
+
+      <div class="callout tip">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg>
+        <div><b>Ringkasnya</b>ALPHACOM = "kamus" kode (banyak penjelasan, isi lebih umum). DIGIROM = "koleksi perintah siap pakai" (kode fungsional yang langsung mengubah hasil di mainan penerima). Keduanya dikirim lewat prong sesuai arah yang dipilih di setting PRONG.</div>
+      </div>
+    </div>
+
+    <div class="subpanel" data-sub="wifi" hidden>
+      <h3 class="sub-head">WiFi — hubungkan Diginode ke internet</h3>
+      <p class="lede">Dua hal yang berbeda tapi saling berkaitan: <b>WIFI CONF</b> (sekali di awal, menyambungkan radio WiFi Diginode + akun online) dan <b>A-COM &gt; WIFICOM</b> (dipakai sehari-hari, untuk benar-benar bertukar data lewat internet setelah tersambung).</p>
+
+      <div class="card">
+        <h3>1. Daftar akun di wificom.dev</h3>
+        <p>Diginode memakai layanan pihak ketiga <b>WiFiCom</b> (<span class="mono">wificom.dev</span>) sebagai jembatan internetnya — layanan ini dibuat untuk "menyambungkan virtual pet favoritmu ke dunia online", bukan dioperasikan oleh proyek VPet Companion sendiri.</p>
+        <div class="shot-grid">
+          <figure class="shot">
+            <img src="shots/10_wificom_dev_home.png" alt="Halaman depan wificom.dev">
+            <figcaption>wificom.dev — tombol View Docs &amp; Login di halaman depan</figcaption>
+          </figure>
+          <figure class="shot">
+            <img src="shots/11_wificom_dev_login.png" alt="Halaman login wificom.dev dengan tautan Create an account">
+            <figcaption>Belum punya akun? Klik "Create an account" di halaman login</figcaption>
+          </figure>
+        </div>
+        <ol>
+          <li>Buka <span class="mono">https://wificom.dev/</span> di HP/komputer.</li>
+          <li>Klik <b>Login</b> — kalau belum punya akun, klik tautan <b>Create an account</b> di halaman itu dan daftar pakai email &amp; password.</li>
+          <li>Setelah masuk, cari bagian <b>WiFiComs</b>, klik <b>New Device</b>, beri nama perangkatmu, lalu <b>Create Device</b>.</li>
+          <li>Di halaman device yang baru dibuat, isi SSID &amp; password WiFi rumah supaya ikut dimasukkan otomatis ke file konfigurasi.</li>
+          <li>Unduh file <span class="mono">secrets.json</span> yang dihasilkan — isinya WiFi, alamat broker MQTT, kredensial, dan ID perangkatmu.</li>
+        </ol>
+      </div>
+
+      <div class="card">
+        <h3>2. Pasang di Diginode lewat SETTING &gt; WIFI CONF</h3>
+        <ol>
+          <li>Di Diginode: <span class="node">MAIN MENU → SETTING → WIFI CONF</span>.</li>
+          <li>Diginode sementara jadi hotspot WiFi sendiri bernama <span class="mono">VPET_COMPANION_xxxx</span> (4 digit terakhir id unik perangkatnya) — pindai kode QR di layar, atau sambung manual ke SSID itu.</li>
+          <li>Buka browser di HP/komputer yang baru tersambung, kunjungi <span class="mono">192.168.4.1</span>.</li>
+          <li>Pilih <b>Upload secrets.json</b>, pilih file yang diunduh dari wificom.dev tadi, lalu <b>Upload &amp; Restart</b>.</li>
+          <li>Diginode restart dan otomatis tersambung ke WiFi rumah serta akun wificom.dev-mu.</li>
+        </ol>
+
+        <figure class="shot" style="max-width:300px;margin:4px auto 0;">
+          <img src="shots/09_wifi_config_page.png" alt="Halaman konfigurasi WiFi Diginode di 192.168.4.1, lengkap dengan tiga cara isi">
+          <figcaption>Halaman 192.168.4.1 sungguhan — diambil langsung dari HTML yang dikirim firmware</figcaption>
+        </figure>
+
+        <p style="margin-top:10px;">Halaman ini punya <b>3 cara</b> mengisi konfigurasi, pilih salah satu saja:</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Cara</th><th>Kapan dipakai</th></tr></thead>
+            <tbody>
+              <tr><td class="mono-cell">Upload secrets.json</td><td>Paling gampang — tinggal pilih file hasil unduhan dari wificom.dev lewat <b>Choose File</b>, lalu <b>Upload &amp; Restart</b>.</td></tr>
+              <tr><td class="mono-cell">Paste JSON</td><td>Kalau isi <span class="mono">secrets.json</span>-nya mau ditempel langsung sebagai teks (mis. dari HP yang filenya susah diunggah), bukan lewat pemilih file.</td></tr>
+              <tr><td class="mono-cell">Manual Form</td><td>Isi satu-satu manual: WiFi SSID (wajib), WiFi Password, MQTT Broker, MQTT Username, MQTT Password, User UUID, Device UUID — berguna untuk ganti satu nilai saja tanpa unduh ulang file.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="flow">
+        <div class="node"><b>wificom.dev</b><span>akun + New Device</span></div>
+        <span class="arrow2">→</span>
+        <div class="node"><b>secrets.json</b><span>diunduh dari dashboard</span></div>
+        <span class="arrow2">→</span>
+        <div class="node accent"><b>DIGINODE</b><span>192.168.4.1 → Upload</span></div>
+        <span class="arrow2">→</span>
+        <div class="node"><b>Restart</b><span>tersambung WiFi + akun</span></div>
+      </div>
+
+      <div class="card">
+        <h3>3. Pakai lewat A-COM &gt; WIFICOM</h3>
+        <p>Setelah tersambung, data A-Com yang dikirim lewat <span class="node">COMMUNICATION → A-COM → WIFICOM</span> mengalir lewat internet (broker MQTT wificom.dev), bukan lewat prong fisik — jadi bisa bertukar data dengan Diginode atau V-Pet lain yang juga online, walau tidak berada di tempat yang sama.</p>
+        <div class="flow">
+          <div class="node accent"><b>DIGINODE KAMU</b></div>
+          <span class="arrow2">⇄</span>
+          <div class="node"><b>wificom.dev</b><span>broker MQTT</span></div>
+          <span class="arrow2">⇄</span>
+          <div class="node accent"><b>DIGINODE TEMAN</b></div>
+        </div>
+      </div>
+
+      <div class="callout tip">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg>
+        <div><b>Catatan</b>Karena WIFICOM bergantung pada layanan eksternal wificom.dev, fitur ini hanya berfungsi selama akun/perangkatmu aktif di sana dan layanannya sedang online. Detail lengkap pendaftaran &amp; dashboard ada di <span class="mono">docs.wificom.dev</span>.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ SETTING ============================================================ -->
+  <section class="panel" id="panel-setting" hidden>
+    <div>
+      <h2 class="sect-title">Setting</h2>
+      <p class="lede">Dibuka lewat <span class="node">MAIN MENU → SETTING</span>. Geser dengan <span class="key a">A</span>, ubah/pilih dengan <span class="key">B</span>, kembali ke Main Menu dengan <span class="key">C</span>.</p>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Item</th><th>Pilihan</th><th>Keterangan</th></tr></thead>
+        <tbody>
+          <tr><td class="mono-cell">PRONG</td><td>ATAS / BAWAH</td><td>Port prong IR mana yang dipakai untuk ADAPTER, A-Com, DigiROM, dan battle perangkat.</td></tr>
+          <tr><td class="mono-cell">SOUND</td><td>OFF / LOW / MID / HIGH</td><td>Volume speaker piezo.</td></tr>
+          <tr><td class="mono-cell">BRIGHT</td><td>20% / 40% / 60% / 80% / 100%</td><td>Kecerahan backlight layar — makin rendah, makin hemat baterai.</td></tr>
+          <tr><td class="mono-cell">BG</td><td>beberapa tema</td><td>Warna/tema latar layar utama. Tekan B untuk membuka galeri pilihan tema.</td></tr>
+          <tr><td class="mono-cell">WIFI CONF</td><td>—</td><td>Membuka konfigurasi WiFi lewat QR + browser (lihat tab Communication, sub-tab WiFi, untuk langkah lengkap termasuk daftar akun wificom.dev).</td></tr>
+          <tr><td class="mono-cell">SET CLOCK</td><td>—</td><td>Satu-satunya tempat mengatur jam. <span class="key a">A</span> = +1 (tahan = cepat), <span class="key">B</span> = pindah field / simpan.</td></tr>
+          <tr><td class="mono-cell">RESET DATA</td><td>NO / YES</td><td>Menghapus Digimon aktif &amp; semua slot cadangan, lalu membuka pemilih telur baru. Jam dan setting lain <b>tidak</b> ikut terhapus.</td></tr>
+          <tr><td class="mono-cell">POWER OFF</td><td>2× tekan B</td><td>Tekan B sekali untuk bertanya "SURE? B = YES", tekan B sekali lagi untuk benar-benar mematikan.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout warn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4M12 17h.01M10.3 3.9 2.7 17a2 2 0 0 0 1.7 3h15.2a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/></svg>
+      <div><b>RESET DATA bersifat permanen</b>Begitu dikonfirmasi YES, Digimon aktif dan seluruh slot cadangan langsung terhapus tanpa bisa dibatalkan. Layar konfirmasi selalu terbuka di pilihan NO agar tombol B yang tidak sengaja tertekan tidak langsung menghapus apa pun.</div>
+    </div>
+  </section>
+
+  <!-- ============================================================ POWER ============================================================ -->
+  <section class="panel" id="panel-power" hidden>
+    <div>
+      <h2 class="sect-title">Daya &amp; Baterai</h2>
+      <p class="lede">Diginode mengatur dayanya sendiri lewat beberapa tingkat hemat energi, khusus saat sedang di layar Digimon atau layar jam.</p>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Setelah tanpa tombol selama</th><th>Perangkat masuk ke</th><th>Yang terjadi</th></tr></thead>
+        <tbody>
+          <tr><td>20 detik</td><td class="mono-cell">Redup</td><td>Backlight turun ke 20%, layar digambar lebih jarang. Tombol apa pun langsung mengembalikannya terang dan tetap berfungsi normal.</td></tr>
+          <tr><td>2 menit</td><td class="mono-cell">Light Sleep</td><td>Layar &amp; backlight mati total, prosesor tidur. Digimon tetap "berjalan" (dicek tiap 10 detik). Tekan tombol apa pun untuk membangunkan layar — penekanan ini hanya membangunkan, belum dihitung sebagai A/B.</td></tr>
+          <tr><td>15 menit</td><td class="mono-cell">Deep Sleep</td><td>Digimon disimpan ke memori &amp; ke penyimpanan permanen, layar benar-benar mati. Perangkat bangun sendiri tiap 30 menit hanya untuk menjalankan waktu Digimon, lalu tidur lagi. Tekan BTN1 atau BTN2 untuk bangun penuh.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p class="lede">Di luar layar Digimon/jam (sedang di dalam menu, ACom, atau Adapter), aturannya lebih sederhana: layar mati total setelah 60 detik tanpa tombol (ACom hanya meredup, tidak mati total).</p>
+
+    <div class="grid-2">
+      <div class="card">
+        <h3>POWER OFF manual</h3>
+        <p>Berbeda dari Deep Sleep otomatis: setelah <span class="node">SETTING → POWER OFF</span> dikonfirmasi, semua data disimpan dan perangkat benar-benar mati tanpa timer bangun otomatis — hanya tombol yang bisa membangunkannya.</p>
+        <p>Karena waktu "beku" tanpa referensi jam saat mati total, begitu dinyalakan kembali perangkat akan meminta <b>SET CLOCK</b> terlebih dahulu sebelum kembali ke layar Digimon.</p>
+      </div>
+      <div class="card">
+        <h3>Baterai</h3>
+        <p>Persentase baterai dihitung dari tegangan sel (kira-kira 3.2V = 0%, 4.15V = 100%) dan ditampilkan di layar bersama indikator sedang mengisi daya atau tidak.</p>
+        <p><b>Hemat baterai:</b> turunkan BRIGHT, kecilkan atau matikan SOUND, dan gunakan POWER OFF manual saat tidak dipakai dalam waktu lama (lebih hemat daripada mengandalkan Deep Sleep otomatis).</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ GLOSSARY / MESSAGES ============================================================ -->
+  <section class="panel" id="panel-glossary" hidden>
+    <div>
+      <h2 class="sect-title">Pesan &amp; Istilah</h2>
+      <p class="lede">Daftar pesan singkat yang muncul di layar, dan istilah yang dipakai berulang di seluruh panduan ini.</p>
+    </div>
+
+    <div class="card">
+      <h3>Pesan di layar</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Pesan</th><th>Artinya / yang harus dilakukan</th></tr></thead>
+          <tbody>
+            <tr><td class="mono-cell">NOT AT STAGE I</td><td>Aksi ini (biasanya CHANGE ke telur baru) hanya boleh dari Baby I.</td></tr>
+            <tr><td class="mono-cell">COLD MODE ON</td><td>Aksi dibatalkan karena Cold Mode sedang menyala — matikan dulu lewat LIGHTS &gt; COLD MODE.</td></tr>
+            <tr><td class="mono-cell">BUSY</td><td>Sedang ada training/battle/quest berjalan — tunggu selesai.</td></tr>
+            <tr><td class="mono-cell">NOTHING TO SWAP</td><td>Tidak ada slot cadangan atau telur baru yang tersedia untuk CHANGE.</td></tr>
+            <tr><td class="mono-cell">CAN'T CHANGE</td><td>Perpindahan slot gagal — coba lagi dari menu LIGHTS &gt; CHANGE.</td></tr>
+            <tr><td class="mono-cell">CAN'T HATCH</td><td>Telur yang dipilih gagal ditetaskan.</td></tr>
+            <tr><td class="mono-cell">JOGRESS!</td><td>Jogress berhasil — Digimon berevolusi lewat penggabungan.</td></tr>
+            <tr><td class="mono-cell">CAN'T JOGRESS</td><td>Jogress gagal/ditolak — kombinasi partner tidak valid.</td></tr>
+            <tr><td class="mono-cell">DEAD</td><td>Digimon aktif sudah mati — gunakan A+B bersamaan untuk mengganti.</td></tr>
+            <tr><td class="mono-cell">ASLEEP</td><td>Digimon sedang tidur — aksi ini hanya bisa dilakukan saat ia bangun.</td></tr>
+            <tr><td class="mono-cell">SICK</td><td>Digimon sedang sakit/luka — obati dulu lewat HEAL.</td></tr>
+            <tr><td class="mono-cell">NO PARTNER</td><td>Tidak ada Digimon lain (di slot cadangan) yang bisa dijadikan partner jogress.</td></tr>
+            <tr><td class="mono-cell">NO JOGRESS</td><td>Ada partner, tapi tidak ada kombinasi jogress yang cocok dengannya.</td></tr>
+            <tr><td class="mono-cell">NOT AVAILABLE</td><td>Fitur koneksi yang dipilih sedang tidak tersedia di perangkat ini.</td></tr>
+            <tr><td class="mono-cell">CAN'T BATTLE</td><td>Belum Stage III, atau DP sudah habis (lihat flag Battle di STATUS P6).</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Istilah penting</h3>
+      <div class="grid-2">
+        <div>
+          <p><b>Stage</b> — tingkat evolusi, ditulis angka Romawi I sampai VI+ (Baby I/II → Child → Adult → Perfect → Ultimate → Super Ultimate).</p>
+          <p><b>Atribut</b> — Free, Vaccine, Data, atau Virus; menentukan keunggulan serangan di battle.</p>
+          <p><b>DP</b> — jatah battle yang terpakai 1 per pertarungan dan terisi ulang lewat VITAMIN.</p>
+          <p><b>Care mistake</b> — kesalahan rawat (membiarkan panggilan lapar/kekuatan terlalu lama, mengganggu tidur, dll.) yang mengurangi Condition.</p>
+        </div>
+        <div>
+          <p><b>Cold Mode</b> — mode beku untuk Digimon aktif; statistiknya berhenti berjalan sampai dimatikan lagi.</p>
+          <p><b>Jogress</b> — penggabungan dua Digimon menjadi satu bentuk evolusi baru.</p>
+          <p><b>Prong</b> — dua port inframerah (atas/bawah) tempat menempelkan perangkat lain untuk bertukar data atau battle.</p>
+          <p><b>Backup slot</b> — Digimon lain yang disimpan paralel (maksimum 2) selagi satu Digimon jadi yang aktif di layar.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  </main>
+
+  <footer class="credit">
+    Panduan ini mengikuti perilaku firmware VPet Companion terbaru. Beberapa fitur komunikasi antar-perangkat masih berstatus eksperimental dan dapat sedikit berubah pada update berikutnya.
+  </footer>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  var ICONS = {
+    overview: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 11l9-7 9 7"/><path d="M5 10v9a1 1 0 0 0 1 1h3v-6h6v6h3a1 1 0 0 0 1-1v-9"/></svg>',
+    control: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="7" width="18" height="12" rx="4"/><circle cx="9" cy="13" r="2"/><circle cx="16" cy="13" r="2"/></svg>',
+    vpet: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><ellipse cx="12" cy="16.5" rx="5" ry="4"/><circle cx="5.5" cy="9.5" r="2"/><circle cx="10" cy="5.5" r="2"/><circle cx="14" cy="5.5" r="2"/><circle cx="18.5" cy="9.5" r="2"/></svg>',
+    communication: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 12a7 7 0 0 1 14 0"/><path d="M8.5 12a3.5 3.5 0 0 1 7 0"/><circle cx="12" cy="12" r="1.3" fill="currentColor" stroke="none"/><path d="M12 13.3V19"/></svg>',
+    setting: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 13.5a1.7 1.7 0 0 0 .34 1.87l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.7 1.7 0 0 0-1.87-.34 1.7 1.7 0 0 0-1 1.55V19a2 2 0 1 1-4 0v-.09a1.7 1.7 0 0 0-1-1.55 1.7 1.7 0 0 0-1.87.34l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.7 1.7 0 0 0 .34-1.87 1.7 1.7 0 0 0-1.55-1H3a2 2 0 1 1 0-4h.09a1.7 1.7 0 0 0 1.55-1 1.7 1.7 0 0 0-.34-1.87l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.7 1.7 0 0 0 1.87.34h0a1.7 1.7 0 0 0 1-1.55V3a2 2 0 1 1 4 0v.09a1.7 1.7 0 0 0 1 1.55 1.7 1.7 0 0 0 1.87-.34l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.7 1.7 0 0 0-.34 1.87v0a1.7 1.7 0 0 0 1.55 1H21a2 2 0 1 1 0 4h-.09a1.7 1.7 0 0 0-1.55 1Z"/></svg>',
+    power: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="8" width="17" height="8" rx="2"/><path d="M22 10.5v3"/><rect x="5" y="10.5" width="4" height="3" fill="currentColor" stroke="none"/></svg>',
+    glossary: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.2a2.5 2.5 0 1 1 3.8 2.1c-.8.5-1.3 1-1.3 2"/><circle cx="12" cy="16.3" r=".1" fill="currentColor" stroke="currentColor" stroke-width="1.6"/></svg>'
+  };
+
+  var TABS = [
+    {id:"overview", label:"Ikhtisar"},
+    {id:"control", label:"Kontrol"},
+    {id:"vpet", label:"VPET"},
+    {id:"communication", label:"Communication"},
+    {id:"setting", label:"Setting"},
+    {id:"power", label:"Daya"},
+    {id:"glossary", label:"Istilah"}
+  ];
+
+  var nav = document.getElementById('tabNav');
+  TABS.forEach(function(t){
+    var b = document.createElement('button');
+    b.type = 'button';
+    b.setAttribute('data-tab', t.id);
+    b.setAttribute('role','tab');
+    b.innerHTML = ICONS[t.id] + '<span>' + t.label + '</span>';
+    b.addEventListener('click', function(){ selectTab(t.id, true); });
+    nav.appendChild(b);
+  });
+
+  function selectTab(id, persist){
+    var found = false;
+    TABS.forEach(function(t){ if(t.id===id) found = true; });
+    if(!found) id = TABS[0].id;
+    nav.querySelectorAll('button').forEach(function(b){
+      b.setAttribute('aria-selected', b.getAttribute('data-tab')===id ? 'true':'false');
+    });
+    document.querySelectorAll('section.panel').forEach(function(s){
+      s.hidden = (s.id !== 'panel-'+id);
+    });
+    if(persist){
+      try{ localStorage.setItem('diginode-manual-tab', id); }catch(e){}
+      if(history && history.replaceState){
+        try{ history.replaceState(null,'','#'+id); }catch(e){}
+      }
+    }
+  }
+
+  function initialTab(){
+    var h = (location.hash||'').replace('#','');
+    if(h) return h;
+    try{
+      var saved = localStorage.getItem('diginode-manual-tab');
+      if(saved) return saved;
+    }catch(e){}
+    return TABS[0].id;
+  }
+
+  window.__selectDiginodeTab = selectTab;
+  selectTab(initialTab(), false);
+
+  // ---- sub-navigation inside VPET / Communication ----
+  function initSubnav(panelId, defaultSub){
+    var panel = document.getElementById(panelId);
+    if(!panel) return;
+    var nav = panel.querySelector('nav.subnav');
+    var subs = panel.querySelectorAll('.subpanel');
+    if(!nav || !subs.length) return;
+    function select(id){
+      nav.querySelectorAll('button').forEach(function(b){
+        b.setAttribute('aria-selected', b.getAttribute('data-sub') === id ? 'true' : 'false');
+      });
+      subs.forEach(function(s){ s.hidden = (s.getAttribute('data-sub') !== id); });
+    }
+    nav.querySelectorAll('button').forEach(function(b){
+      b.addEventListener('click', function(){ select(b.getAttribute('data-sub')); });
+    });
+    select(defaultSub);
+  }
+  initSubnav('panel-vpet', 'status');
+  initSubnav('panel-communication', 'adapter');
+})();
+</script>
+
+</body></html>
