@@ -20,9 +20,11 @@ function App() {
   const [eraseData, setEraseData] = useState(false);
 
   useEffect(() => {
-    fetch('./versions.json')
+    const versionsUrl = new URL('../versions.json', window.location.href);
+    fetch(versionsUrl)
       .then(res => res.json())
       .then(data => {
+        data = data.map(v => ({ ...v, manifest: new URL(v.manifest, versionsUrl).href }));
         setVersions(data);
         if (data.length > 0) {
           setSelectedManifest(data[0].manifest);
@@ -399,6 +401,7 @@ function App() {
 
   return (
     <div className="glass-container">
+      <a href="../" style={{ display: 'block', marginBottom: '1rem', fontSize: '0.7rem', color: 'inherit' }}>&larr; Panduan</a>
       <img src={logoImage} alt="Diginode" className="main-logo" style={{ maxWidth: '100%', height: 'auto', maxHeight: '100px', display: 'block', margin: '0 auto 2rem auto', filter: 'drop-shadow(0 4px 6px rgba(0,0,0,0.5))' }} />
 
       {appState === "DISCONNECTED" || appState === "CONNECTING" ? renderDisconnected() : renderDashboard()}
