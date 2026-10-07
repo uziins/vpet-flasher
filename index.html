@@ -330,7 +330,7 @@
   <section class="panel" id="panel-overview">
     <div>
       <h2 class="sect-title">Tentang Diginode</h2>
-      <p class="lede">Diginode adalah kloning firmware Digimon V-Pet (gaya "Pendulum Color") yang berjalan di mikrokontroler ESP32. Satu unit menyimpan satu Digimon aktif yang perlu dirawat, dilatih, dan dievolusikan, lengkap dengan battle dan jogress — baik secara offline maupun dengan menghubungkannya ke perangkat lain.</p>
+      <p class="lede">Diginode merupakan firmware replika Digimon V-Pet (berbasis "Pendulum Color") yang beroperasi pada mikrokontroler ESP32. Setiap unit menyimpan satu Digimon aktif yang harus dirawat, dilatih, dan dievolusikan, dilengkapi dengan fitur battle dan jogress—baik secara luring (offline) maupun terhubung dengan perangkat lain.</p>
     </div>
 
     <div class="device-mock">
@@ -349,17 +349,17 @@
       <div class="device-caption">
         <p style="margin:0 0 8px;"><b>Perangkat keras utama:</b></p>
         <ul style="margin:0;padding-left:1.2em;">
-          <li>Layar TFT kecil (135×240 atau 170×320) menampilkan Digimon, ikon menu, dan jam.</li>
-          <li>2 tombol fisik — <b>BTN1</b> dan <b>BTN2</b> — mengendalikan semua navigasi.</li>
-          <li>Dua port inframerah ("prong") di bagian atas &amp; bawah untuk tempel-ke-tempel dengan alat lain.</li>
-          <li>Speaker piezo kecil untuk bunyi, serta baterai dengan indikator persen di layar.</li>
+          <li>Layar TFT (ukuran 135×240 atau 170×320) berfungsi untuk menampilkan karakter Digimon, ikon menu, serta jam.</li>
+          <li>Dua tombol fisik (<b>BTN1</b> dan <b>BTN2</b>) yang digunakan untuk mengontrol seluruh navigasi.</li>
+          <li>Dua port inframerah ("prong") di bagian atas dan bawah untuk komunikasi fisik dengan perangkat lain.</li>
+          <li>Speaker piezo untuk keluaran suara, serta dukungan baterai dengan indikator persentase daya pada layar.</li>
         </ul>
       </div>
     </div>
 
     <div class="card">
-      <h3>Tampilan layar sungguhan <span class="tag">dari simulator resmi</span></h3>
-      <p>Cuplikan ini diambil langsung dari simulator browser proyek VPet Companion (mesin game yang sama persis dengan firmware), bukan reka-reka.</p>
+      <h3>Tampilan Layar Aktual <span class="tag">dari simulator resmi</span></h3>
+      <p>Tangkapan layar ini diambil langsung dari simulator web proyek VPet Companion (mesin permainan dasar dari firmware), bukan sekadar ilustrasi.</p>
       <div class="shot-grid">
         <figure class="shot">
           <img src="shots/01_egg_chooser.png" alt="Pemilih telur pertama kali">
@@ -373,7 +373,7 @@
     </div>
 
     <div class="card">
-      <h3>Struktur menu besar</h3>
+      <h3>Struktur Menu Utama</h3>
       <p>Saat sedang menampilkan Digimon (layar utama) atau jam, tahan <span class="key hold">Tahan B</span> untuk membuka <b>MAIN MENU</b>. Dari sana semua fitur bercabang jadi tiga:</p>
       <div class="path">
         <span class="node">MAIN MENU</span><span class="arrow">→</span>
@@ -389,7 +389,7 @@
     </div>
 
     <div class="card">
-      <h3>Mulai cepat <span class="tag">pertama kali</span></h3>
+      <h3>Panduan Mulai Cepat <span class="tag">Pengguna Baru</span></h3>
       <ol>
         <li>Saat pertama kali dinyalakan (belum ada Digimon tersimpan), layar langsung menampilkan <b>pemilih telur</b>. Tekan <span class="key a">A</span> untuk bergeser antar telur, lalu <span class="key">B</span> untuk menetaskannya.</li>
         <li>Rawat Digimon setiap hari: beri makan dan vitamin (menu FOOD), bersihkan kotoran (FLUSH), obati bila sakit/luka (HEAL), dan nyala/matikan lampu malam (LIGHTS).</li>
@@ -409,14 +409,14 @@
   <section class="panel" id="panel-control" hidden>
     <div>
       <h2 class="sect-title">Tombol &amp; Kontrol</h2>
-      <p class="lede">Diginode hanya punya dua tombol fisik, tetapi kombinasi tekan-pendek dan tekan-tahan menghasilkan tiga perintah logis: A, B, dan C.</p>
+      <p class="lede">Perangkat keras Diginode hanya memiliki dua tombol fisik, namun kombinasi tekan-singkat dan tekan-tahan menghasilkan tiga perintah navigasi utama: A, B, dan C.</p>
     </div>
 
     <div class="table-wrap">
       <table>
         <thead><tr><th>Tombol fisik</th><th>Aksi</th><th>Artinya</th></tr></thead>
         <tbody>
-          <tr><td class="mono-cell"><span class="key">BTN1</span> tekan singkat</td><td class="mono-cell"><span class="key a">A</span></td><td>Lanjut / geser pilihan ke item berikutnya. Saat hitungan latihan atau battle berjalan, A juga jadi tombol "goyang" (ditekan berulang secepat mungkin).</td></tr>
+          <tr><td class="mono-cell"><span class="key">BTN1</span> tekan singkat</td><td class="mono-cell"><span class="key a">A</span></td><td>Lanjut atau geser kursor ke opsi berikutnya. Pada fase perhitungan saat latihan (training) atau pertarungan (battle), tombol A berfungsi sebagai tombol "kocok" atau shake (ditekan berulang secepat mungkin).</td></tr>
           <tr><td class="mono-cell"><span class="key">BTN1</span> tahan ~0.35 dtk</td><td class="mono-cell"><span class="key">C</span></td><td>Kembali / batal — naik satu level menu, atau menutup menu jika sudah di level teratas.</td></tr>
           <tr><td class="mono-cell"><span class="key">BTN2</span> tekan singkat</td><td class="mono-cell"><span class="key">B</span></td><td>Konfirmasi / masuk submenu / jalankan aksi yang sedang dipilih. Saat Digimon makan, dibersihkan, atau diobati, B juga melewati (skip) animasinya.</td></tr>
           <tr><td class="mono-cell"><span class="key">BTN2</span> tahan ~0.35 dtk</td><td class="mono-cell">Buka Menu Utama</td><td>Hanya berlaku dari layar Digimon atau layar jam — langsung membuka <span class="node">MAIN MENU</span>.</td></tr>
@@ -581,14 +581,14 @@
 
     <div class="subpanel" data-sub="train" hidden>
     <h3 class="sub-head">Latihan, Evolusi &amp; Jogress</h3>
-    <p class="lede">Slot ketiga (TRAINING) menaikkan statistik lewat mini-game goyang; evolusi dan jogress berjalan di atas statistik dan kondisi yang terkumpul dari situ.</p>
+    <p class="lede">Slot ketiga (TRAINING) menaikkan statistik lewat mini-game kocok (shake); evolusi dan jogress berjalan di atas statistik dan kondisi yang terkumpul dari situ.</p>
 
     <div class="card">
       <h3>Mini-game TRAINING</h3>
       <ol>
         <li>Buka slot TRAINING dan tekan <span class="key">B</span> untuk mulai.</li>
-        <li>Saat fase hitungan (COUNT) berjalan, tekan <span class="key a">A</span> berulang-ulang secepat mungkin — ini "menggoyang" Digimon.</li>
-        <li>Semakin banyak &amp; semakin cepat goyangan terkumpul, semakin tinggi warna indikator yang dicapai dan semakin besar kenaikan Strength/Effort yang didapat, dengan sedikit pengurangan berat badan.</li>
+        <li>Saat fase hitungan (COUNT) berjalan, tekan <span class="key a">A</span> berulang-ulang secepat mungkin — ini berfungsi sebagai aksi "mengocok" (shake) Digimon.</li>
+        <li>Semakin banyak &amp; semakin cepat kocokan (shake) terkumpul, semakin tinggi warna indikator yang dicapai dan semakin besar kenaikan Strength/Effort yang didapat, dengan sedikit pengurangan berat badan.</li>
         <li>Latihan yang bagus juga menurunkan sedikit risiko luka (injury rate) untuk battle berikutnya.</li>
       </ol>
     </div>
@@ -641,7 +641,7 @@
         <p>Daftar AREA 1, 2, 3, … terbuka satu per satu — menang di satu AREA membuka AREA berikutnya. Setiap battle berjalan dengan pola yang sama:</p>
         <ol>
           <li>Tekan <span class="key">B</span> pada AREA yang dipilih untuk memulai.</li>
-          <li>Saat fase hitungan (COUNT) muncul, goyang dengan menekan <span class="key a">A</span> berulang — ini menentukan seberapa kuat serangan pertama.</li>
+          <li>Saat fase hitungan (COUNT) muncul, kocok dengan menekan <span class="key a">A</span> berulang — ini menentukan seberapa kuat serangan pertama.</li>
           <li>Pertarungan berjalan otomatis bergilir, dipengaruhi statistik dan keunggulan atribut (lihat segitiga di bawah).</li>
           <li>Hasil (menang/kalah) ditampilkan, lalu kembali ke menu BATTLE.</li>
         </ol>
@@ -661,7 +661,7 @@
         <ul>
           <li><b>DIGINODE &gt; PRONG</b> — rencananya battle melawan Diginode lain lewat sentuhan prong IR (atas/bawah sesuai setting PRONG). <b>Belum didukung</b> di Diginode untuk sekarang.</li>
           <li><b>DIGINODE &gt; WIFI</b> — battle yang sama tetapi lewat jaringan WiFi. Saat ini baru bisa antar-Diginode yang berada di jaringan WiFi yang sama; battle online lintas internet (lewat wificom.dev, lihat tab Communication) masih dalam pengembangan.</li>
-          <li><b>BANDAI &gt; PENDULUM COLOR / DIGIMON COLOR</b> — battle melawan mainan V-Pet Bandai asli dengan menempelkan prong. Goyang dulu seperti mainan asli, lalu tunggu balasan dari perangkat tersebut.</li>
+          <li><b>BANDAI &gt; PENDULUM COLOR / DIGIMON COLOR</b> — battle melawan mainan V-Pet Bandai asli dengan menempelkan prong. Lakukan kocokan (shake) seperti pada perangkat aslinya, lalu tunggu balasan dari perangkat tersebut.</li>
           <li><b>BANDAI &gt; MONO OTHER</b> — mode kompatibilitas untuk berbicara dengan Digimon generasi lama (hitam-putih/"Mono").</li>
         </ul>
 
@@ -1034,7 +1034,7 @@
 
         <figure class="shot" style="max-width:300px;margin:4px auto 0;">
           <img src="shots/09_wifi_config_page.png" alt="Halaman konfigurasi WiFi Diginode di 192.168.4.1, lengkap dengan tiga cara isi">
-          <figcaption>Halaman 192.168.4.1 sungguhan — diambil langsung dari HTML yang dikirim firmware</figcaption>
+          <figcaption>Tampilan halaman aktual 192.168.4.1 — diambil langsung dari HTML yang dikirim firmware</figcaption>
         </figure>
 
         <p style="margin-top:10px;">Halaman ini punya <b>3 cara</b> mengisi konfigurasi, pilih salah satu saja:</p>
@@ -1216,7 +1216,7 @@
   };
 
   var TABS = [
-    {id:"overview", label:"Ikhtisar"},
+    {id:"overview", label:"Gambaran Umum"},
     {id:"control", label:"Kontrol"},
     {id:"vpet", label:"VPET"},
     {id:"communication", label:"Communication"},
